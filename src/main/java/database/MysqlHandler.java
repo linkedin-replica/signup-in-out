@@ -1,19 +1,16 @@
 package database;
 
-
 import model.User;
 
-import java.util.List;
+public class MysqlHandler implements DatabaseHandler {
 
-public class ArangoHandler implements DatabaseHandler{
+
     public void connect() {
-        // TODO
+
     }
 
-
-
     public void disconnect() {
-        // TODO
+
     }
 
     public User getUser(String email) {

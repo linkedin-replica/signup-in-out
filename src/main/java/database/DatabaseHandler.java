@@ -1,7 +1,7 @@
 package database;
 
 
-import java.util.List;
+import model.User;
 
 public interface DatabaseHandler {
     /**
@@ -14,4 +14,14 @@ public interface DatabaseHandler {
      * Close a connection with the database
      */
     void disconnect();
+
+    /**
+     * Get a user with his email
+     */
+    User getUser(String email);
+
+    /**
+     * Create a new user
+     */
+    void createUser(String email, String password);
 }
