@@ -1,4 +1,4 @@
 development.driver=com.mysql.jdbc.Driver
 development.username=root
-development.password=wala7aga
+development.password=1234
 development.url=jdbc:mysql://localhost/linkedin
