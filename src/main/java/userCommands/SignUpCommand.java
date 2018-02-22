@@ -2,9 +2,9 @@ package userCommands;
 
 import java.util.HashMap;
 
-public class signInCommand extends abstraction.Command {
+public class SignUpCommand extends abstraction.Command {
 
-    public signInCommand(HashMap<String, String> args) {
+    public SignUpCommand(HashMap<String, String> args) {
         super(args);
     }
 
