@@ -1,9 +1,0 @@
-/home/ahmed/Work place/signup-in-out/src/main/java/model/User.java
-/home/ahmed/Work place/signup-in-out/src/main/java/abstraction/Command.java
-/home/ahmed/Work place/signup-in-out/src/main/java/userCommands/signInCommand.java
-/home/ahmed/Work place/signup-in-out/src/main/java/database/ArangoHandler.java
-/home/ahmed/Work place/signup-in-out/src/main/java/userCommands/signOutCommand.java
-/home/ahmed/Work place/signup-in-out/src/main/java/database/MysqlHandler.java
-/home/ahmed/Work place/signup-in-out/src/main/java/userCommands/signUpCommand.java
-/home/ahmed/Work place/signup-in-out/src/main/java/database/DatabaseHandler.java
-/home/ahmed/Work place/signup-in-out/src/main/java/database/DatabaseInstance.java
