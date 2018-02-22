@@ -5,7 +5,7 @@ package database;
  */
 public class DatabaseInstance {
 
-    // TODO uncouple arango, read from some config file
+    // TODO uncouple arango, read from some database.properties file
     private static DatabaseHandler db = new ArangoHandler();
 
     private DatabaseInstance() {}
