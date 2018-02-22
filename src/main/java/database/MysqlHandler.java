@@ -41,9 +41,8 @@ public class MysqlHandler implements DatabaseHandler {
      * @return User
      */
     public User getUser(String email) {
-        User u = User.findFirst("email = ?", email);
-        System.out.println(u);
-        return u;
+        User user = User.findFirst("email = ?", email);
+        return user;
     }
 
     /**

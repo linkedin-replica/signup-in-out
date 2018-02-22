@@ -16,9 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-/**
- *
- */
 public class SignInCommand extends abstraction.Command {
 
     private static final  String secretKey = "NpapHelGNRvAWEc0XGLYDJI83rdo5yJp1sxAS";
@@ -31,8 +28,12 @@ public class SignInCommand extends abstraction.Command {
     }
 
     /**
-     *
-     * @return
+     * Handle the sign in process and generate the JWT token to be used in authontication
+     * //TODO:: handle Try and catch 3shan ana mbdon mn throws,
+     * //TODO:: add the token to the cache server
+     * @return Response with result and error if exist
+     * @throws NoSuchAlgorithmException source SHA512 hash class
+     * @throws UnsupportedEncodingException
      */
     public LinkedHashMap<String, Object> execute() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
@@ -58,16 +59,15 @@ public class SignInCommand extends abstraction.Command {
                                     SignatureAlgorithm.HS256,
                                     secretKey.getBytes("UTF-8")
                             ).compact();
+
                     response.put("results", jwt);
-                }else{
-                    //TODO:: handle incorrect password
-                }
-            }else{
-                //TODO:: handle unregistered user
-            }
-        }else {
-            //TODO:: handle incomplete data
-        }
+                }else
+                    response.put("error", "Incorrect password");
+            }else
+                response.put("error", "No such user");
+        }else
+            response.put("error", "Missing information");
+
         return response;
     }
 }
