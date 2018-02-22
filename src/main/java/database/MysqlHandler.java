@@ -8,11 +8,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ *
+ */
 public class MysqlHandler implements DatabaseHandler {
 
 
+    /**
+     *
+     */
     private Properties properties;
 
+    /**
+     * @throws IOException
+     */
     public MysqlHandler() throws IOException {
         properties = new Properties();
         properties.load(new FileInputStream("config"));
@@ -26,16 +35,26 @@ public class MysqlHandler implements DatabaseHandler {
         Base.close();
     }
 
+    /**
+     * Get the user of an email or null if it's not found
+     * @param email of the user
+     * @return User
+     */
     public User getUser(String email) {
         User u = User.findFirst("email = ?", email);
         System.out.println(u);
         return u;
     }
 
+    /**
+     * Create user if it already exist
+     * @param email
+     * @param password
+     */
     public void createUser(String email, String password) {
-        User u = new User();
-        u.set("email", email);
-        u.set("password", password);
-        u.saveIt();
+        User user = new User();
+        user.set("email", email);
+        user.set("password", password);
+        user.saveIt();
     }
 }

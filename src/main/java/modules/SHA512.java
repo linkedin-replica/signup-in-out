@@ -8,9 +8,6 @@ public class SHA512 {
 
     public static String hash(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-512");
-        System.out.println(md.getProvider() + "  " + md.getAlgorithm() + "  "
-                + md.getDigestLength());
-
         md.update(password.getBytes());
 
         /*
@@ -19,10 +16,6 @@ public class SHA512 {
          * its initialized state.
          */
         byte byteData[] = md.digest();
-
-        System.out.println("Password:" + password);
-        System.out.println("Mesage Digest(Hex): " + bytesToHex(byteData));
-        System.out.println("Digest Message Length = " + byteData.length * 8);
         return bytesToHex(byteData);
     }
 

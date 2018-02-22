@@ -1,6 +1,7 @@
 package userCommands;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class SignUpCommand extends abstraction.Command {
 
@@ -8,7 +9,7 @@ public class SignUpCommand extends abstraction.Command {
         super(args);
     }
 
-    public String execute() {
+    public LinkedHashMap<String, Object> execute() {
         return null;
     }
 }
