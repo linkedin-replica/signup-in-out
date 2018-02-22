@@ -3,11 +3,23 @@ package database;
 import model.User;
 import org.javalite.activejdbc.Base;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 public class MysqlHandler implements DatabaseHandler {
 
 
+    private Properties properties;
+
+    public MysqlHandler() throws IOException {
+        properties = new Properties();
+        properties.load(new FileInputStream("config"));
+    }
+
     public void connect() {
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/linkedin", "root", "MOhamed2@");
+        Base.open(properties.getProperty("development.driver"), properties.getProperty("development.url"), properties.getProperty("development.username"), properties.getProperty("development.password"));
     }
 
     public void disconnect() {
@@ -25,15 +37,5 @@ public class MysqlHandler implements DatabaseHandler {
         u.set("email", email);
         u.set("password", password);
         u.saveIt();
-    }
-
-    public static void main(String[] args) {
-        MysqlHandler db = new MysqlHandler();
-        db.connect();
-
-        //db.createUser("ab", "cd");
-        User u = db.getUser("Esraa.Khaled@yahoo.com");
-        System.out.println(u.get("id"));
-        db.disconnect();
     }
 }
