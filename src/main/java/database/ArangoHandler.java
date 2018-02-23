@@ -15,13 +15,39 @@ public class ArangoHandler implements DatabaseHandler{
     private static final Logger LOGGER = LogManager.getLogger(ArangoHandler.class.getName());
 
     private Properties configProps;
-    private ArangoDB driver;
+    private ArangoDB arangoDriver;
     private ArangoDatabase database;
     private ArangoCollection collection;
+    private static ArangoHandler dbConnection;
+
 
     public ArangoHandler(){
         configProps = readConfig();
+        initializeArangoDB();
     }
+
+    private void initializeArangoDB() {
+        arangoDriver = new ArangoDB.Builder()
+                .user(configProps.getProperty("arangodb.user"))
+                .password(configProps.getProperty("arangodb.password"))
+                .build();
+    }
+
+    /**
+     * Get a singleton DB instance
+     * @return The DB instance
+     */
+    public static ArangoHandler getDBConnection() {
+        if(dbConnection == null)
+            dbConnection = new ArangoHandler();
+        return dbConnection;
+    }
+
+    public ArangoDB getArangoDriver() {
+        return arangoDriver;
+    }
+
+
     /**
      * Connects to ArangoDB
      */
@@ -30,19 +56,19 @@ public class ArangoHandler implements DatabaseHandler{
         String collectionName = configProps.getProperty("collection.users.name");
 
         /* Select driver */
-        driver = DatabaseConnection.getDBConnection().getArangoDriver();
+        arangoDriver = getDBConnection().getArangoDriver();
 
         /* If database does not exist */
-        if (!driver.getDatabases().contains(databaseName)) {
+        if (!arangoDriver.getDatabases().contains(databaseName)) {
             /* Create database */
-            driver.createDatabase(databaseName);
+            arangoDriver.createDatabase(databaseName);
             /* Create collection */
-            driver.db(databaseName).createCollection(collectionName);
+            arangoDriver.db(databaseName).createCollection(collectionName);
             System.out.println("Database created");
         }
 
         /* Select database */
-        database = driver.db(databaseName);
+        database = arangoDriver.db(databaseName);
         /* Select collection */
         collection = database.collection(collectionName);
     }
@@ -52,7 +78,7 @@ public class ArangoHandler implements DatabaseHandler{
      */
     public void disconnect() {
         /* Tear down connection */
-        driver.shutdown();
+        arangoDriver.shutdown();
     }
 
     /**
