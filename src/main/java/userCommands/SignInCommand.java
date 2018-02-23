@@ -2,9 +2,6 @@ package userCommands;
 
 import database.DatabaseHandler;
 import database.MysqlHandler;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.MacProvider;
 import model.User;
 import modules.JwtUtils;
 import modules.SHA512;
@@ -12,10 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,4 +61,6 @@ public class SignInCommand extends abstraction.Command {
         response.put("errMsg", errMsg);
         return response;
     }
+
+
 }

@@ -56,4 +56,5 @@ public class MysqlHandler implements DatabaseHandler {
         user.set("password", password);
         user.saveIt();
     }
+
 }
