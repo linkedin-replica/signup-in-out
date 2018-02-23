@@ -1,9 +1,7 @@
 package database;
 
-
-import model.User;
-
 public interface DatabaseHandler {
+
     /**
      * Initiate a connection with the database
      */
@@ -18,10 +16,10 @@ public interface DatabaseHandler {
     /**
      * Get a user with his email
      */
-    User getUser(String email);
+    Object getUser(String id);
 
     /**
      * Create a new user
      */
-    void createUser(String email, String password);
+    String createUser(Object user);
 }
