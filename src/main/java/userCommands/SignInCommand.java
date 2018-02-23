@@ -3,8 +3,8 @@ package userCommands;
 import database.DatabaseHandler;
 import database.MysqlHandler;
 import model.User;
-import modules.JwtUtils;
-import modules.SHA512;
+import utils.JwtUtils;
+import utils.SHA512;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,12 +17,12 @@ import java.util.Map;
 
 public class SignInCommand extends abstraction.Command {
 
-    private DatabaseHandler db;
+    private DatabaseHandler databaseHandler;
     private static final Logger LOGGER = LogManager.getLogger(SignInCommand.class.getName());
 
     public SignInCommand(HashMap<String, String> args) throws IOException {
         super(args);
-        db = new MysqlHandler();
+        databaseHandler = new MysqlHandler();
     }
 
     /**
@@ -38,11 +38,13 @@ public class SignInCommand extends abstraction.Command {
         if(args.containsKey("email") && args.containsKey("password")){
 
             String email = args.get("email");
+            String userId = args.get("userId");
+
             String password = SHA512.hash(args.get("password"));
 
-            db.connect();
-            User user = db.getUser(email);
-            db.disconnect();
+            databaseHandler.connect();
+            User user = (User)databaseHandler.getUser(email);
+            databaseHandler.disconnect();
 
             if(user != null){
                 if(user.get("password").equals(password)){

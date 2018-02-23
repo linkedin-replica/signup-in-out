@@ -1,60 +1,89 @@
 package database;
 
 import model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.javalite.activejdbc.Base;
+import utils.ConfigReader;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Properties;
 
-/**
- *
- */
 public class MysqlHandler implements DatabaseHandler {
 
+    private static final Logger LOGGER = LogManager.getLogger(MysqlHandler.class.getName());
+    private String driverName, url, username, password;
 
     /**
-     *
+     * Initialize the attributes of the database from the config file
      */
-    private Properties properties;
-
-    /**
-     * @throws IOException
-     */
-    public MysqlHandler() throws IOException {
-        properties = new Properties();
-        properties.load(new FileInputStream("config"));
+    public MysqlHandler() {
+        Properties config = ConfigReader.readConfig();
+        driverName = config.getProperty("development.driver");
+        url = config.getProperty("development.url");
+        username = config.getProperty("development.username");
+        password = config.getProperty("development.password");
     }
 
+    /**
+     * Open the connection to the mysql db using config file's attributes
+     */
     public void connect() {
-        Base.open(properties.getProperty("development.driver"), properties.getProperty("development.url"), properties.getProperty("development.username"), properties.getProperty("development.password"));
+        Base.open(driverName, url, username, password);
     }
 
+    /**
+     * Close the connection
+     */
     public void disconnect() {
         Base.close();
     }
 
+
     /**
-     * Get the user of an email or null if it's not found
-     * @param email of the user
-     * @return User
+     * Get the user with it's email
+     * @param email user email
+     * @return Model of the User or null if it is not found
      */
-    public User getUser(String email) {
-        User user = User.findFirst("email = ?", email);
-        return user;
+    public Object getUser(String email) {
+        return User.findFirst("email = ?", email);
     }
 
     /**
-     * Create user if it already exist
+     * Get the user with id userId
+     * @param id user primary key
+     * @return Model of the User or null if it is not found
+     */
+    public User getUserWithId(String id) {
+        return User.findFirst("id = ?", id);
+    }
+
+
+    /**
+     * Create a user in db if it isn't exist
      * @param email
      * @param password
+     * @return user id
      */
-    public void createUser(String email, String password) {
+    public String createUser(String email, String password) {
         User user = new User();
         user.set("email", email);
         user.set("password", password);
-        user.saveIt();
+        return this.createUser(user);
     }
 
+    /**
+     * Create a user in db if it isn't exist
+     * @param tmpUser
+     * @return Created user id in db
+     */
+    public String createUser(Object tmpUser) {
+        User user = (User) tmpUser;
+        try {
+            user.saveIt();
+        }catch (org.javalite.activejdbc.DBException e){
+            LOGGER.warn(String.format("User of email: %s, already registered", user.getString("email")));
+        }finally {
+            return ((User)getUser(user.getString("email"))).getString("id");
+        }
+    }
 }
