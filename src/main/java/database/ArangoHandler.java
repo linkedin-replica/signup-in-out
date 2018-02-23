@@ -18,27 +18,42 @@ public class ArangoHandler {
     /**
      * Connects to ArangoDB
      */
-    public void connect() throws IOException {
+    public void connect(){
         /* Read config file */
-        ConfigReader config = new ConfigReader("config");
-        String databaseName = config.getConfig("db.name");
-        String collectionName = config.getConfig("collection.users.name");
+        try{
+            ConfigReader config = new ConfigReader("config");
+            String databaseName = config.getConfig("db.name");
+            String collectionName = config.getConfig("collection.users.name");
 
-        /* Select driver */
-        this.driver = DatabaseConnection.getDBConnection().getArangoDriver();
+            /* Select driver */
+            driver = DatabaseConnection.getDBConnection().getArangoDriver();
 
-        /* If database does not exist */
-        if (!this.driver.getDatabases().contains(databaseName)) {
-            /* Create database */
-            this.driver.createDatabase(databaseName);
-            /* Create collection */
-            this.driver.db(databaseName).createCollection(collectionName);
+                try{
+                    /* If database does not exist */
+                     if (!driver.getDatabases().contains(databaseName)) {
+                         /* Create database */
+
+                         driver.createDatabase(databaseName);
+                         System.out.println("1");
+
+                         driver.db(databaseName).createCollection(collectionName);
+                         System.out.println("Database created");
+                     }
+
+                }catch (ArangoDBException e) {
+                    System.out.println("Failed to create database");
+                }
+                /* Create collection */
+
+
+            /* Select database */
+            database = driver.db(databaseName);
+            /* Select collection */
+            collection = database.collection(collectionName);
+        } catch (IOException e){
+            e.printStackTrace();
         }
 
-        /* Select database */
-        this.database = driver.db(databaseName);
-        /* Select collection */
-        this.collection = database.collection(collectionName);
     }
 
     /**
@@ -46,7 +61,7 @@ public class ArangoHandler {
      */
     public void disconnect() {
         /* Tear down connection */
-        this.driver.shutdown();
+        driver.shutdown();
     }
 
     /**
@@ -80,7 +95,7 @@ public class ArangoHandler {
         return true;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ArangoHandler handler = new ArangoHandler();
         handler.connect();
 
