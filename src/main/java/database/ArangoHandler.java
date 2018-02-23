@@ -5,12 +5,13 @@ import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDBException;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
+import model.User;
 import model.UserProfile;
 import utils.ConfigReader;
 
 import java.io.IOException;
 
-public class ArangoHandler {
+public class ArangoHandler implements DatabaseHandler{
     private ArangoDB driver;
     private ArangoDatabase database;
     private ArangoCollection collection;
@@ -55,6 +56,14 @@ public class ArangoHandler {
         driver.shutdown();
     }
 
+    public User getUser(String email) {
+        return null;
+    }
+
+    public void createUser(String email, String password) {
+
+    }
+
     /**
      * Retrieves user profile by key
      */
@@ -67,24 +76,17 @@ public class ArangoHandler {
      * Creates user profile
      */
     public String createUserProfile(UserProfile userProfile) throws ArangoDBException {
-        /* Check validity before insertion */
-        if (!isValidUserProfile(userProfile)) {
-            throw new RuntimeException("Invalid user profile");
+        if(driver!= null){
+            /* Insert user profile */
+            DocumentCreateEntity insertedUserProfile = collection.insertDocument(userProfile);
+            return insertedUserProfile.getKey();
         }
+        else {
 
-        /* Insert user profile */
-        DocumentCreateEntity insertedUserProfile = collection.insertDocument(userProfile);
-        return insertedUserProfile.getKey();
+            return null;
+        }
     }
 
-    /**
-     * Validates user profile
-     */
-    public boolean isValidUserProfile(UserProfile userProfile) {
-        // TODO: Check if valid email
-        // TODO: Check if email does not already exist
-        return true;
-    }
 
     public static void main(String[] args) {
         ArangoHandler handler = new ArangoHandler();
