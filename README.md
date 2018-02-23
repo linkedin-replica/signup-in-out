@@ -16,8 +16,9 @@ Maven Projects --> Plugins --> activeJdbc --> activeJdbc:instrument --> Run Mave
 ### Keep in mind:
 - Surround each exception with try/catch.
 - Document each function (/** + Enter).
-- Use logger SEVERE/WARNING/INFO.
+- Use logger FATAL/WARNING/INFO. (log4j)
 - WARNING in case the exception don't affect the major entities (DB, server, cache).
-- SEVERE (DB, server, cache).
+- FATAL (DB, server, cache).
+
 
 
