@@ -2,50 +2,49 @@ package database;
 
 import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoDB;
-import com.arangodb.ArangoDBException;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
-import model.User;
 import model.UserProfile;
-import utils.ConfigReader;
-
-import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.util.Properties;
+import static utils.ConfigReader.readConfig;
 
 public class ArangoHandler implements DatabaseHandler{
+
+    private static final Logger LOGGER = LogManager.getLogger(ArangoHandler.class.getName());
+
+    private Properties configProps;
     private ArangoDB driver;
     private ArangoDatabase database;
     private ArangoCollection collection;
 
+    public ArangoHandler(){
+        configProps = readConfig();
+    }
     /**
      * Connects to ArangoDB
      */
     public void connect(){
-        /* Read config file */
-        try{
-            ConfigReader config = new ConfigReader("config");
-            String databaseName = config.getConfig("db.name");
-            String collectionName = config.getConfig("collection.users.name");
+        String databaseName = configProps.getProperty("db.name");
+        String collectionName = configProps.getProperty("collection.users.name");
 
-            /* Select driver */
-            driver = DatabaseConnection.getDBConnection().getArangoDriver();
+        /* Select driver */
+        driver = DatabaseConnection.getDBConnection().getArangoDriver();
 
-            /* If database does not exist */
-            if (!driver.getDatabases().contains(databaseName)) {
-                /* Create database */
-                driver.createDatabase(databaseName);
-                /* Create collection */
-                driver.db(databaseName).createCollection(collectionName);
-                System.out.println("Database created");
-            }
-
-            /* Select database */
-            database = driver.db(databaseName);
-            /* Select collection */
-            collection = database.collection(collectionName);
-        } catch (IOException e){
-            e.printStackTrace();
+        /* If database does not exist */
+        if (!driver.getDatabases().contains(databaseName)) {
+            /* Create database */
+            driver.createDatabase(databaseName);
+            /* Create collection */
+            driver.db(databaseName).createCollection(collectionName);
+            System.out.println("Database created");
         }
 
+        /* Select database */
+        database = driver.db(databaseName);
+        /* Select collection */
+        collection = database.collection(collectionName);
     }
 
     /**
@@ -56,51 +55,38 @@ public class ArangoHandler implements DatabaseHandler{
         driver.shutdown();
     }
 
-    public User getUser(String email) {
-        return null;
+    /**
+     * Creates user profile
+     */
+    public String createUser(Object user) {
+        UserProfile userProfile= (UserProfile) user;
+
+        DocumentCreateEntity insertedUserProfile = collection.insertDocument(userProfile);
+        return insertedUserProfile.getKey();
     }
 
-    public void createUser(String email, String password) {
-
-    }
 
     /**
      * Retrieves user profile by key
      */
-    public UserProfile getUserProfile(String key) {
+    public Object getUser(String id) {
         /* Retrieve user profile */
-        return collection.getDocument(key, UserProfile.class);
+        return collection.getDocument(id, UserProfile.class);
     }
-
-    /**
-     * Creates user profile
-     */
-    public String createUserProfile(UserProfile userProfile) throws ArangoDBException {
-        if(driver!= null){
-            /* Insert user profile */
-            DocumentCreateEntity insertedUserProfile = collection.insertDocument(userProfile);
-            return insertedUserProfile.getKey();
-        }
-        else {
-
-            return null;
-        }
-    }
-
 
     public static void main(String[] args) {
         ArangoHandler handler = new ArangoHandler();
         handler.connect();
 
-        String key = handler.createUserProfile(
-                new UserProfile(
-                        "nabila.ahmed@gmail.com",
-                        "Nabila",
-                        "Ahmed"
-                )
-        );
+        UserProfile userProfile = UserProfile.Instantiate();
 
-        System.out.println(handler.getUserProfile(key));
+        userProfile.setEmail("nabila.ahmed@gmail.com");
+        userProfile.setFirstName("Nabila");
+        userProfile.setLastName("Ahmed");
+
+        String key = handler.createUser(userProfile);
+
+        System.out.println(handler.getUser(key));
 
         handler.disconnect();
     }

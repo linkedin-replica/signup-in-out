@@ -10,11 +10,8 @@ public class UserProfile {
         super();
     }
 
-    public UserProfile(String email, String firstName, String lastName) {
-        this();
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public static UserProfile Instantiate(){
+        return new UserProfile();
     }
 
 

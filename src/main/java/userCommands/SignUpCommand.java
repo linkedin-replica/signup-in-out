@@ -5,23 +5,26 @@ import database.DatabaseHandler;
 import database.MysqlHandler;
 import model.User;
 import model.UserProfile;
-import modules.SHA512;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import utils.SHA512;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class SignUpCommand extends abstraction.Command {
 
-    private DatabaseHandler sqldb;
-    private DatabaseHandler nosqldb;
-    public SignUpCommand(HashMap<String, String> args) throws IOException{
+    private DatabaseHandler sqldbHandler;
+    private DatabaseHandler nosqldbHandler;
+
+    private static final Logger LOGGER = LogManager.getLogger(SignUpCommand.class.getName());
+
+    public SignUpCommand(HashMap<String, String> args){
         super(args);
-        sqldb = new MysqlHandler();
-        nosqldb = new ArangoHandler();
+        sqldbHandler = new MysqlHandler();
+        nosqldbHandler = new ArangoHandler();
     }
 
     /**
@@ -32,34 +35,55 @@ public class SignUpCommand extends abstraction.Command {
         return EmailValidator.getInstance().isValid(email);
     }
 
-
+    /**
+     * Handle the sign up process and generate the ID of the inserted user to be used accross services
+     * @return Response with result and error message if an error occurs
+     */
     public LinkedHashMap<String, Object> execute() {
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
+        String errMsg= "Nothing is wrong";
+        Boolean success = false;
+        String profileKey;
+
 
         if(args.containsKey("email") && args.containsKey("password") && args.containsKey("firstName") && args.containsKey("lastName")) {
 
             String email = args.get("email");
             String password = SHA512.hash(args.get("password"));
 
-            sqldb.connect();
-            User user = sqldb.getUser(email);
-            sqldb.disconnect();
+            sqldbHandler.connect();
+            User user = (User) sqldbHandler.getUser(email);
+            sqldbHandler.disconnect();
 
             if(user != null){
-                response.put("error", "This user already exists, Do you want to sign in?");
+                errMsg = "This user already exists, Do you want to sign in?";
             } else if(isValidUserEmail(email)){
-                response.put("error", "Invalid Email");
+                LOGGER.warn("Invalid email");
+                errMsg =  "Invalid Email";
             } else{
-                String key = sqldb.createUser(email, password);
+                User newUser= new User();
+                newUser.set(email, email);
+                newUser.set(password, password);
+                String key = sqldbHandler.createUser(newUser);
+
                 String firstName = args.get("firstName");
                 String lastName = args.get("lastName");
 
-                UserProfile userProfile = new UserProfile(email, firstName, lastName);
-                String profileKey = nosqldb.createUser(userProfile);
+                UserProfile userProfile = UserProfile.Instantiate();
+                userProfile.setKey(key);
+                userProfile.setEmail(email);
+                userProfile.setFirstName(firstName);
+                userProfile.setLastName(lastName);
+
+                profileKey = nosqldbHandler.createUser(userProfile);
+                success = true;
+                response.put("profileKey", profileKey);
             }
         }else
-            response.put("error", "Missing information");
+            errMsg = "Missing information";
 
+        response.put("success",success);
+        response.put("error", errMsg);
         return response;
     }
 }
