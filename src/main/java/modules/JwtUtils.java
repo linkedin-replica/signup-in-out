@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+// TODO: Discuss the way of signing the token and which key to be used
+// TODO: Discuss if we should refresh the token
+
 public class JwtUtils {
 
     private static final Logger LOGGER = LogManager.getLogger(JwtUtils.class.getName());
@@ -21,26 +24,23 @@ public class JwtUtils {
      * Generate jwt token based on claims, id of user to be authenticated and expiration duration
      * @param claims key-value pair to be put in the token body
      * @param userId id of user in mysql database
+     * @param secretKey key to be for signing the token
      * @param minToExpire time in minutes this token will be valid
      * @return map holding token, error message and success boolean
      */
 
-    public Map<String, Object> generateToken(Map<String, Object> claims, String userId, long minToExpire) {
-        return generateToken(claims, userId, secretKey, minToExpire);
-    }
-
-    public Map<String, Object> generateToken(Map<String, Object> claims, String userId, String secretKey, long minToExpire) {
+    public static LinkedHashMap<String, Object> generateToken(Map<String, Object> claims, String userId, String secretKey, long minToExpire) {
         String token = null;
         String errMsg = "No errors";
         Boolean success = false;
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         try {
             token =  Jwts.builder()
+                    .setClaims(claims)
                     .setId(userId)
                     .setIssuedAt(new Date())
                     .setIssuer("linkedin.login")
-                    .setClaims(claims)
-                    .setExpiration(this.generateExpirationDate(minToExpire))
+                    .setExpiration(generateExpirationDate(minToExpire))
                     .signWith(SignatureAlgorithm.HS512, secretKey.getBytes("UTF-8"))
                     .compact();
         } catch (Exception ex) {
@@ -57,17 +57,29 @@ public class JwtUtils {
     }
 
     /**
+     * Generate jwt token based on claims, id of user to be authenticated and expiration duration
+     * @param claims key-value pair to be put in the token body
+     * @param userId id of user in mysql database
+     * @param minToExpire time in minutes this token will be valid
+     * @return map holding token, error message and success boolean
+     */
+
+    public static LinkedHashMap<String, Object> generateToken(Map<String, Object> claims, String userId, long minToExpire) {
+        return generateToken(claims, userId, secretKey, minToExpire);
+    }
+
+    /**
      * Validate jwt token and return claims in its body
      * @param token jwt token to be authenticated
      * @param secretKey key used in signing the token
      * @return map holding claims, error message and success boolean
      */
 
-    public Map<String, Object> validateToken(String token, String secretKey) {
+    public static LinkedHashMap<String, Object> validateToken(String token, String secretKey) {
         Jws<Claims> claims = null;
         String errMsg = "No errors";
         Boolean success = false;
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         try {
             claims = Jwts.parser()
                     .setSigningKey(secretKey.getBytes("UTF-8"))
@@ -99,7 +111,13 @@ public class JwtUtils {
         }
     }
 
-    public Map<String, Object> validateToken(String token) {
+    /**
+     * Validate jwt token and return claims in its body
+     * @param token jwt token to be authenticated
+     * @return map holding claims, error message and success boolean
+     */
+
+    public static LinkedHashMap<String, Object> validateToken(String token) {
         return validateToken(token, secretKey);
     }
 
@@ -109,7 +127,7 @@ public class JwtUtils {
      * @return date of token expiration
      */
 
-    private Date generateExpirationDate(long minutes) {
+    private static Date generateExpirationDate(long minutes) {
         return new Date(System.currentTimeMillis() + minutes * 60 * 1000);
     }
 }

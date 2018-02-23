@@ -6,7 +6,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import model.User;
+import modules.JwtUtils;
 import modules.SHA512;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,12 +18,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+//TODO: add the token to the cache server
 
 public class SignInCommand extends abstraction.Command {
 
-    private static final  String secretKey = "NpapHelGNRvAWEc0XGLYDJI83rdo5yJp1sxAS";
     private DatabaseHandler db;
-
+    private static final Logger LOGGER = LogManager.getLogger(SignInCommand.class.getName());
 
     public SignInCommand(HashMap<String, String> args) throws IOException {
         super(args);
@@ -28,15 +33,14 @@ public class SignInCommand extends abstraction.Command {
     }
 
     /**
-     * Handle the sign in process and generate the JWT token to be used in authontication
-     * //TODO:: handle Try and catch 3shan ana mbdon mn throws,
-     * //TODO:: add the token to the cache server
-     * @return Response with result and error if exist
-     * @throws NoSuchAlgorithmException source SHA512 hash class
-     * @throws UnsupportedEncodingException
+     * Handle the sign in process and generate the JWT token to be used in authentication
+     * @return Response with result and error message if an error occurs
      */
-    public LinkedHashMap<String, Object> execute() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+    public LinkedHashMap<String, Object> execute() {
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
+
+        String errMsg;
 
         if(args.containsKey("email") && args.containsKey("password")){
 
@@ -49,25 +53,19 @@ public class SignInCommand extends abstraction.Command {
 
             if(user != null){
                 if(user.get("password").equals(password)){
-
-                    String jwt = Jwts.builder()
-                            .setSubject("users/TzMUocMF4p")
-                            .setExpiration(new Date())
-                            .claim("email", args.get("email"))
-                            .claim("scope", "self groups/admins")
-                            .signWith(
-                                    SignatureAlgorithm.HS256,
-                                    secretKey.getBytes("UTF-8")
-                            ).compact();
-
-                    response.put("results", jwt);
+                    Map<String, Object> claims = new HashMap<String, Object>();
+                    claims.put("email", user.get("email"));
+                    claims.put("scope", "self/groups/admins");
+                    response = JwtUtils.generateToken(claims, user.getString("id"), 60);
+                    return response;
                 }else
-                    response.put("error", "Incorrect password");
+                    errMsg = "Incorrect password";
             }else
-                response.put("error", "No such user");
+                errMsg = "No such user";
         }else
-            response.put("error", "Missing information");
+            errMsg = "Missing information";
 
+        response.put("errMsg", errMsg);
         return response;
     }
 }

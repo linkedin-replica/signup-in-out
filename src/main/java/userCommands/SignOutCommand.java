@@ -1,49 +1,32 @@
 package userCommands;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import modules.JwtUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.UnsupportedEncodingException;
-import java.security.SignatureException;
 import java.util.HashMap;
-import java.security.MessageDigest;
 import java.util.LinkedHashMap;
-import javax.xml.bind.DatatypeConverter;
 
 public class SignOutCommand extends abstraction.Command {
 
-    private static final  String secretKey = "NpapHelGNRvAWEc0XGLYDJI83rdo5yJp1sxAS";
+    private static final Logger LOGGER = LogManager.getLogger(SignOutCommand.class.getName());
 
     public SignOutCommand(HashMap<String, String> args) {
         super(args);
     }
 
-    public LinkedHashMap<String, Object> execute() throws UnsupportedEncodingException {
+    /**
+     * Checks validity of token
+     * @return  Return success boolean in response
+     */
 
+    public LinkedHashMap<String, Object> execute() {
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         String jwtToken = args.get("jwtToken");
+        response.put("success", false);
 
-        if(jwtToken != null) {
-            try {
-                //OK, we can trust this JWT
-                Jws<Claims> claims = Jwts.parser()
-                        .setSigningKey(secretKey.getBytes("UTF-8"))
-                        .parseClaimsJws(jwtToken);
-                System.out.println("Succcess");
-            } catch (io.jsonwebtoken.SignatureException e) {
-                System.out.println(e.getMessage());
-                //don't trust the JWT!
-            } catch (io.jsonwebtoken.ExpiredJwtException e){
-                System.out.println(e.getMessage());
-            }
-            catch (Exception e) {
-
-            }
-        }
-        else {
-
-        }
+        if(jwtToken != null && (Boolean)JwtUtils.validateToken(jwtToken).get("success"))
+                response.put("success", true);
 
         return response;
     }
