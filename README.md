@@ -13,3 +13,11 @@ development.url=jdbc:mysql://localhost/linkedin
 Maven Projects --> Plugins --> activeJdbc --> activeJdbc:instrument --> Run Maven Build
 ```
 
+### Keep in mind:
+- Surround each exception with try/catch.
+- Document each function (/** + Enter).
+- Use logger SEVERE/WARNING/INFO.
+- WARNING in case the exception don't affect the major entities (DB, server, cache).
+- SEVERE (DB, server, cache).
+
+
