@@ -28,23 +28,14 @@ public class ArangoHandler {
             /* Select driver */
             driver = DatabaseConnection.getDBConnection().getArangoDriver();
 
-                try{
-                    /* If database does not exist */
-                     if (!driver.getDatabases().contains(databaseName)) {
-                         /* Create database */
-
-                         driver.createDatabase(databaseName);
-                         System.out.println("1");
-
-                         driver.db(databaseName).createCollection(collectionName);
-                         System.out.println("Database created");
-                     }
-
-                }catch (ArangoDBException e) {
-                    System.out.println("Failed to create database");
-                }
+            /* If database does not exist */
+            if (!driver.getDatabases().contains(databaseName)) {
+                /* Create database */
+                driver.createDatabase(databaseName);
                 /* Create collection */
-
+                driver.db(databaseName).createCollection(collectionName);
+                System.out.println("Database created");
+            }
 
             /* Select database */
             database = driver.db(databaseName);
