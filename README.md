@@ -19,6 +19,3 @@ Maven Projects --> Plugins --> activeJdbc --> activeJdbc:instrument --> Run Mave
 - Use logger FATAL/WARNING/INFO. (log4j)
 - WARNING in case the exception don't affect the major entities (DB, server, cache).
 - FATAL (DB, server, cache).
-
-
-
