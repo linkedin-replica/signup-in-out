@@ -1,20 +1,25 @@
 package modules;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import userCommands.SignInCommand;
+
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SHA512 {
 
-    public static String hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(password.getBytes());
+    private static final Logger LOGGER = LogManager.getLogger(SHA512.class.getName());
 
-        /*
-         * The digest method can be called once for a given number of updates.
-         * After digest has been called, the MessageDigest object is reset to
-         * its initialized state.
-         */
+    public static String hash(String password) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException ex) {
+            LOGGER.warn(ex.getMessage());
+        }
+        md.update(password.getBytes());
         byte byteData[] = md.digest();
         return bytesToHex(byteData);
     }
