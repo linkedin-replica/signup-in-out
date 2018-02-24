@@ -53,7 +53,6 @@ public class SignUpCommand extends abstraction.Command {
 
             sqldbHandler.connect();
             User user = (User) sqldbHandler.getUser(email);
-            sqldbHandler.disconnect();
 
             if(user != null){
                 errMsg = "This user already exists, Do you want to sign in?";
@@ -64,24 +63,27 @@ public class SignUpCommand extends abstraction.Command {
                 User newUser= new User();
                 newUser.set(email, email);
                 newUser.set(password, password);
-                String key = sqldbHandler.createUser(newUser);
+                String key = sqldbHandler.createUser(newUser); // use this key as the id of Userprofile object
 
+                nosqldbHandler.connect();
                 String firstName = args.get("firstName");
                 String lastName = args.get("lastName");
 
                 UserProfile userProfile = UserProfile.Instantiate();
-                userProfile.setKey(key);
+                userProfile.setId(key);
                 userProfile.setEmail(email);
                 userProfile.setFirstName(firstName);
                 userProfile.setLastName(lastName);
 
-                profileKey = nosqldbHandler.createUser(userProfile);
+                profileKey = nosqldbHandler.createUser(userProfile); // use this profile key to communicate with arango(get/ delete)
+                nosqldbHandler.disconnect();
                 success = true;
                 response.put("profileKey", profileKey);
             }
         }else
             errMsg = "Missing information";
 
+        sqldbHandler.disconnect();
         response.put("success",success);
         response.put("error", errMsg);
         return response;
