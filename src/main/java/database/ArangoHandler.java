@@ -100,6 +100,7 @@ public class ArangoHandler implements DatabaseHandler{
         return collection.getDocument(id, UserProfile.class);
     }
 
+    //TODO: Delete Later
     public static void main(String[] args) {
         ArangoHandler handler = new ArangoHandler();
         handler.connect();
