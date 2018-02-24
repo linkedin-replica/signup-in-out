@@ -97,9 +97,9 @@ public class ArangoHandler implements DatabaseHandler{
      * Retrieves user profile by arango database key
      * @return UserProfile
      */
-    public Object getUser(String id) {
+    public Object getUser(String key) {
         /* Retrieve user profile */
-        return collection.getDocument(id, UserProfile.class);
+        return collection.getDocument(key, UserProfile.class);
     }
 
     public static void main(String[] args) {
