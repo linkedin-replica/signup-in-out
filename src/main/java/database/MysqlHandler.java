@@ -86,4 +86,11 @@ public class MysqlHandler implements DatabaseHandler {
             return ((User)getUser(user.getString("email"))).getString("id");
         }
     }
+
+    /**
+     * Delete all users from db
+     */
+    public void deleteAll(){
+        User.deleteAll();
+    }
 }
