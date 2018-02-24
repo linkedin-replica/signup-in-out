@@ -23,10 +23,14 @@ public class SignOutCommand extends abstraction.Command {
     public LinkedHashMap<String, Object> execute() {
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         String jwtToken = args.get("jwtToken");
-        response.put("success", false);
 
-        if(jwtToken != null && (Boolean)JwtUtils.validateToken(jwtToken).get("success"))
-                response.put("success", true);
+        if(jwtToken == null)
+        {
+            response.put("errMsg", "Failure due to missing parameters while signing out");
+            response.put("success", false);
+        }
+        else
+            response = JwtUtils.validateToken(jwtToken);
 
         return response;
     }

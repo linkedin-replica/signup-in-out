@@ -8,19 +8,16 @@ import utils.SHA512;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-//TODO: add the token to the cache server
 
 public class SignInCommand extends abstraction.Command {
 
     private DatabaseHandler databaseHandler;
     private static final Logger LOGGER = LogManager.getLogger(SignInCommand.class.getName());
 
-    public SignInCommand(HashMap<String, String> args) throws IOException {
+    public SignInCommand(HashMap<String, String> args) {
         super(args);
         databaseHandler = new MysqlHandler();
     }
@@ -38,7 +35,6 @@ public class SignInCommand extends abstraction.Command {
         if(args.containsKey("email") && args.containsKey("password")){
 
             String email = args.get("email");
-            String userId = args.get("userId");
 
             String password = SHA512.hash(args.get("password"));
 
@@ -47,11 +43,12 @@ public class SignInCommand extends abstraction.Command {
             databaseHandler.disconnect();
 
             if(user != null){
-                if(user.get("password").equals(password)){
+                if(user.getString("password").equals(password)){
                     Map<String, Object> claims = new HashMap<String, Object>();
                     claims.put("email", user.get("email"));
                     claims.put("scope", "self/groups/admins");
-                    response = JwtUtils.generateToken(claims, user.getString("id"), 60);
+                    response = JwtUtils.generateToken(claims, user.getString("id"),
+                            60);
                     return response;
                 }else
                     errMsg = "Incorrect password";
@@ -59,7 +56,7 @@ public class SignInCommand extends abstraction.Command {
                 errMsg = "No such user";
         }else
             errMsg = "Missing information";
-
+        response.put("success", false);
         response.put("errMsg", errMsg);
         return response;
     }

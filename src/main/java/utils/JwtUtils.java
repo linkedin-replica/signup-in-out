@@ -32,7 +32,7 @@ public class JwtUtils {
     public static LinkedHashMap<String, Object> generateToken(Map<String, Object> claims, String userId, String secretKey, long minToExpire) {
         String token = null;
         String errMsg = "No errors";
-        Boolean success = false;
+        Boolean success = true;
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         try {
             token =  Jwts.builder()
@@ -78,13 +78,12 @@ public class JwtUtils {
     public static LinkedHashMap<String, Object> validateToken(String token, String secretKey) {
         Jws<Claims> claims = null;
         String errMsg = "No errors";
-        Boolean success = false;
+        Boolean success = true;
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         try {
             claims = Jwts.parser()
                     .setSigningKey(secretKey.getBytes("UTF-8"))
                     .parseClaimsJws(token);
-            success = true;
         }
         catch (io.jsonwebtoken.SignatureException ex) {
             //don't trust the JWT!
