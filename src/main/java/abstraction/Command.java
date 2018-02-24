@@ -17,5 +17,5 @@ public abstract class Command {
      *
      * @return The output (if any) of the command
      */
-    public abstract LinkedHashMap<String, Object> execute() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    public abstract LinkedHashMap<String, Object> execute();
 }
