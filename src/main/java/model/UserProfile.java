@@ -1,7 +1,7 @@
 package model;
 
 public class UserProfile {
-    private String key;
+    private String id;
     private String email;
     private String firstName;
     private String lastName;
@@ -15,13 +15,14 @@ public class UserProfile {
     }
 
 
-    public String getKey() {
-        return key;
+    public String getId() {
+        return id;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setId(String id) {
+        this.id = id;
     }
+
 
     public String getEmail() {
         return email;
@@ -50,7 +51,7 @@ public class UserProfile {
     @Override
     public String toString() {
         return "UserProfile {" +
-                "key='" + key + '\'' +
+                "id='" + id + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

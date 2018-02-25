@@ -4,6 +4,7 @@ import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
+import model.User;
 import model.UserProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,7 @@ public class ArangoHandler implements DatabaseHandler{
     private ArangoDB arangoDriver;
     private ArangoDatabase database;
     private ArangoCollection collection;
-    private static ArangoHandler dbConnection;
+    private static ArangoHandler dbConnection; //
 
 
     public ArangoHandler(){
@@ -64,7 +65,6 @@ public class ArangoHandler implements DatabaseHandler{
             arangoDriver.createDatabase(databaseName);
             /* Create collection */
             arangoDriver.db(databaseName).createCollection(collectionName);
-            System.out.println("Database created");
         }
 
         /* Select database */
@@ -83,6 +83,7 @@ public class ArangoHandler implements DatabaseHandler{
 
     /**
      * Creates user profile
+     * @return string key for entry in database
      */
     public String createUser(Object user) {
         UserProfile userProfile= (UserProfile) user;
@@ -93,11 +94,12 @@ public class ArangoHandler implements DatabaseHandler{
 
 
     /**
-     * Retrieves user profile by key
+     * Retrieves user profile by arango database key
+     * @return UserProfile
      */
-    public Object getUser(String id) {
+    public Object getUser(String key) {
         /* Retrieve user profile */
-        return collection.getDocument(id, UserProfile.class);
+        return collection.getDocument(key, UserProfile.class);
     }
 
     //TODO: Delete Later
@@ -107,12 +109,14 @@ public class ArangoHandler implements DatabaseHandler{
 
         UserProfile userProfile = UserProfile.Instantiate();
 
+        userProfile.setId("1");
         userProfile.setEmail("nabila.ahmed@gmail.com");
         userProfile.setFirstName("Nabila");
         userProfile.setLastName("Ahmed");
 
         String key = handler.createUser(userProfile);
 
+        System.out.println(key);
         System.out.println(handler.getUser(key));
 
         handler.disconnect();
