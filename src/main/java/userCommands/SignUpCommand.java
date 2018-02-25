@@ -8,7 +8,6 @@ import model.UserProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.SHA512;
-
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
@@ -56,13 +55,13 @@ public class SignUpCommand extends abstraction.Command {
 
             if(user != null){
                 errMsg = "This user already exists, Do you want to sign in?";
-            } else if(isValidUserEmail(email)){
+            } else if(!isValidUserEmail(email)){
                 LOGGER.warn("Invalid email");
                 errMsg =  "Invalid Email";
             } else{
                 User newUser= new User();
-                newUser.set(email, email);
-                newUser.set(password, password);
+                newUser.set("email", email);
+                newUser.set("password", password);
                 String key = sqldbHandler.createUser(newUser); // use this key as the id of Userprofile object
 
                 nosqldbHandler.connect();
@@ -85,7 +84,7 @@ public class SignUpCommand extends abstraction.Command {
 
         sqldbHandler.disconnect();
         response.put("success",success);
-        response.put("error", errMsg);
+        response.put("errMsg", errMsg);
         return response;
     }
 }
