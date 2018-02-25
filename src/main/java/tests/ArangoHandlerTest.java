@@ -1,4 +1,4 @@
-package test;
+package tests;
 
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
