@@ -20,7 +20,7 @@ public class MysqlHandlerTest {
 
     @Test
     public void testCreateUser() {
-        String email = "Esraa.Khaled%^%golokoz.com";
+        String email = "Esraa.Khaled@golokoz.com";
         String password = "SokarNbat";
         User.delete("email = ?", email);
 
@@ -36,7 +36,7 @@ public class MysqlHandlerTest {
 
     @Test
     public void testGetUser() {
-        String email = "Esraa.Khaled%+%golokoz.com";
+        String email = "Esraa.Khaled@golokoz.com";
         String password = "SokarNbat";
         User.delete("email = ?", email);
 
