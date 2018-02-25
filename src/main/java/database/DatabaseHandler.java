@@ -25,9 +25,4 @@ public interface DatabaseHandler {
      */
     String createUser(Object user);
 
-    /**
-     * Delete all records from database
-     */
-    void deleteAll();
-
 }
