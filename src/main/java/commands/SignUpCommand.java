@@ -1,4 +1,4 @@
-package userCommands;
+package commands;
 
 import database.ArangoHandler;
 import database.DatabaseHandler;
@@ -22,8 +22,8 @@ public class SignUpCommand extends abstraction.Command {
 
     public SignUpCommand(HashMap<String, String> args){
         super(args);
-        sqldbHandler = new MysqlHandler();
-        nosqldbHandler = new ArangoHandler();
+        sqldbHandler = (MysqlHandler) this.dbHandlers.get("sqldbHandler");
+        nosqldbHandler = (ArangoHandler) this.dbHandlers.get("nosqldbHandler");
     }
 
     /**
@@ -42,8 +42,6 @@ public class SignUpCommand extends abstraction.Command {
         LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
         String errMsg= "Nothing is wrong";
         Boolean success = false;
-        String profileKey;
-
 
         if(args.containsKey("email") && args.containsKey("password") && args.containsKey("firstName") && args.containsKey("lastName")) {
 

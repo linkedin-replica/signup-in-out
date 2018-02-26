@@ -1,4 +1,4 @@
-package userCommands;
+package commands;
 
 import utils.JwtUtils;
 import org.apache.logging.log4j.LogManager;

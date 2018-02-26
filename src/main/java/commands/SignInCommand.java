@@ -1,4 +1,4 @@
-package userCommands;
+package commands;
 
 import database.DatabaseHandler;
 import database.MysqlHandler;
@@ -19,7 +19,8 @@ public class SignInCommand extends abstraction.Command {
 
     public SignInCommand(HashMap<String, String> args) {
         super(args);
-        databaseHandler = new MysqlHandler();
+        databaseHandler = (MysqlHandler) this.dbHandlers.get("sqldbHandler");
+
     }
 
     /**
