@@ -54,7 +54,7 @@ public class MysqlHandler implements DatabaseHandler {
      * @return Model of the User or null if it is not found
      */
     public User getUserWithId(String id) {
-        return User.findFirst("id = ?", id);
+        return User.findFirst("id=?", id);
     }
 
 
@@ -85,5 +85,12 @@ public class MysqlHandler implements DatabaseHandler {
         }finally {
             return ((User)getUser(user.getString("email"))).getString("id");
         }
+    }
+
+    /**
+     * Delete all users from db
+     */
+    public void deleteAll(){
+        User.deleteAll();
     }
 }

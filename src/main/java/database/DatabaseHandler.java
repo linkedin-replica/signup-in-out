@@ -1,5 +1,7 @@
 package database;
 
+import model.User;
+
 public interface DatabaseHandler {
 
     /**
@@ -22,4 +24,5 @@ public interface DatabaseHandler {
      * Create a new user
      */
     String createUser(Object user);
+
 }

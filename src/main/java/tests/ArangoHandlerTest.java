@@ -1,4 +1,4 @@
-package test;
+package tests;
 
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
@@ -63,20 +63,21 @@ public class ArangoHandlerTest {
         String email = "nabila.ahmed@gmail.com";
         String firstname = "Nabila";
         String lastname = "Ahmed";
+        String key = "1";
 
         UserProfile userProfile = UserProfile.Instantiate();
 
-        userProfile.setId("1");
+        userProfile.setKey(key);
         userProfile.setEmail(email);
         userProfile.setFirstName(firstname);
         userProfile.setLastName(lastname);
 
         DocumentCreateEntity user = arangoDb.collection(config.getProperty("collection.users.name")).insertDocument(userProfile);
 
-        UserProfile newUser = (UserProfile) arangoHandler.getUser(user.getKey());
-        assertEquals(String.format("Expected both users have the same email", email), email, newUser.getEmail());
-        assertEquals(String.format("Expected both users have the same firstname", firstname), firstname, newUser.getFirstName());
-        assertEquals(String.format("Expected both users have the same lastname", lastname), lastname, newUser.getLastName());
+        UserProfile newUser = (UserProfile) arangoHandler.getUser(key);
+        assertEquals(String.format("Expected both users have the same email: %s", email), email, newUser.getEmail());
+        assertEquals(String.format("Expected both users have the same firstname: %s", firstname), firstname, newUser.getFirstName());
+        assertEquals(String.format("Expected both users have the same lastname: %s", lastname), lastname, newUser.getLastName());
 
         arangoDb.collection(config.getProperty("collection.users.name")).deleteDocument(user.getKey());
         assertEquals("The user should be deleted",arangoDb.collection(config.getProperty("collection.users.name")).documentExists(user.getKey()), false);

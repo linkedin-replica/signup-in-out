@@ -1,3 +1,5 @@
+package tests;
+
 import abstraction.Command;
 import database.MysqlHandler;
 import model.User;
