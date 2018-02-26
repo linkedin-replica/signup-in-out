@@ -69,15 +69,15 @@ public class SignUpCommand extends abstraction.Command {
                 String lastName = args.get("lastName");
 
                 UserProfile userProfile = UserProfile.Instantiate();
-                userProfile.setId(key);
+                userProfile.setKey(key);
                 userProfile.setEmail(email);
                 userProfile.setFirstName(firstName);
                 userProfile.setLastName(lastName);
 
-                profileKey = nosqldbHandler.createUser(userProfile); // use this profile key to communicate with arango(get/ delete)
+                nosqldbHandler.createUser(userProfile);
                 nosqldbHandler.disconnect();
                 success = true;
-                response.put("profileKey", profileKey);
+                response.put("userId", key);
             }
         }else
             errMsg = "Missing information";
