@@ -1,6 +1,8 @@
 package abstraction;
 
+import database.ArangoHandler;
 import database.DatabaseHandler;
+import database.MysqlHandler;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -13,9 +15,11 @@ public abstract class Command {
 
     public Command(HashMap<String, String> args) {
         this.args = args;
+        setDbHandlers(new MysqlHandler(), new ArangoHandler());
     }
 
     public void setDbHandlers(DatabaseHandler sqldbHandler, DatabaseHandler nosqldbHandler) {
+        dbHandlers = new HashMap<String, DatabaseHandler>();
         dbHandlers.put("sqldbHandler", sqldbHandler);
         dbHandlers.put("nosqldbHandler", nosqldbHandler);
     }
