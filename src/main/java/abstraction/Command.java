@@ -4,8 +4,6 @@ import database.ArangoHandler;
 import database.DatabaseHandler;
 import database.MysqlHandler;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -15,7 +13,8 @@ public abstract class Command {
 
     public Command(HashMap<String, String> args) {
         this.args = args;
-        setDbHandlers(new MysqlHandler(), new ArangoHandler());
+        //TODO: remove this line. the service will call it instead !! only leave on tests
+//        setDbHandlers(new MysqlHandler(), new ArangoHandler());
     }
 
     public void setDbHandlers(DatabaseHandler sqldbHandler, DatabaseHandler nosqldbHandler) {
