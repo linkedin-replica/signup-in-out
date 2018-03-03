@@ -22,7 +22,7 @@ public class UserAuthenticationService {
 
     public UserAuthenticationService() {
         config = ConfigReader.readCommandConfig();
-        appConfig = ConfigReader.readConfig("resources/app.config");
+        appConfig = ConfigReader.readAppConfig();
     }
 
     public LinkedHashMap<String, Object> serve(String commandName, HashMap<String, String> args) {
