@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-    private static final String FilePath = "src/main/resources/config";
+    private static final String FilePath = "src/main/resources/database.config";
 
     private static final Logger LOGGER = LogManager.getLogger(ConfigReader.class.getName());
 

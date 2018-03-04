@@ -66,6 +66,9 @@ public class UserAuthenticationService {
             LOGGER.warn("Couldn't Instantiate handler");
             e.printStackTrace();
 
+        }catch (Exception e) {
+            LOGGER.warn("Exception thrown in class UserAuthenticationService");
+            e.printStackTrace();
         }finally {
             return null;
         }
