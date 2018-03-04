@@ -6,8 +6,7 @@ import model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import userCommands.SignInCommand;
-import userCommands.SignOutCommand;
+import commands.SignOutCommand;
 import utils.JwtUtils;
 
 import java.util.HashMap;

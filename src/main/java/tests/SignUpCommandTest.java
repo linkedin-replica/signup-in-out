@@ -9,8 +9,7 @@ import model.UserProfile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import userCommands.SignInCommand;
-import userCommands.SignUpCommand;
+import commands.SignUpCommand;
 import utils.SHA512;
 
 import java.util.HashMap;
