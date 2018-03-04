@@ -1,7 +1,12 @@
 package model;
 
+import com.arangodb.entity.DocumentField;
+
 public class UserProfile {
-    private String id;
+
+    @DocumentField(DocumentField.Type.KEY)
+    private String key;
+
     private String email;
     private String firstName;
     private String lastName;
@@ -13,16 +18,6 @@ public class UserProfile {
     public static UserProfile Instantiate(){
         return new UserProfile();
     }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
 
     public String getEmail() {
         return email;
@@ -48,13 +43,22 @@ public class UserProfile {
         this.lastName = lastName;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
     @Override
     public String toString() {
         return "UserProfile {" +
-                "id='" + id + '\'' +
+                "key='" + key + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
     }
+
 }

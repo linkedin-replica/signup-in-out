@@ -6,7 +6,7 @@ import model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import userCommands.SignInCommand;
+import commands.SignInCommand;
 import utils.SHA512;
 
 import java.util.HashMap;

@@ -8,11 +8,18 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-    private static final String FilePath = "config";
+    private static final String FilePath = "src/main/resources/database.config";
+
     private static final Logger LOGGER = LogManager.getLogger(ConfigReader.class.getName());
 
     public static Properties readConfig(){
         return readConfig(FilePath);
+    }
+    public static Properties readCommandConfig(){
+        return readConfig("src/main/resources/commands.config");
+    }
+    public static Properties readAppConfig(){
+        return readConfig("src/main/resources/app.config");
     }
 
     public static Properties readConfig(String filePath){

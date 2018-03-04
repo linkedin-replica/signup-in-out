@@ -5,11 +5,11 @@ import com.arangodb.ArangoDatabase;
 import database.ArangoHandler;
 import database.MysqlHandler;
 import model.User;
+import model.UserProfile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import userCommands.SignInCommand;
-import userCommands.SignUpCommand;
+import commands.SignUpCommand;
 import utils.SHA512;
 
 import java.util.HashMap;
@@ -55,10 +55,9 @@ public class SignUpCommandTest {
     public void execute() {
         String email = "Esraa.Khaled@golokoz.com";
         String password = "SokarNbat";
-//        User user = new User();
-//        user.set("email", email);
-//        user.set("password", password);
-//        user.saveIt();
+        String firstName = "walaa";
+        String lastName = "bahaa";
+        mysqlHandler.createUser(email, password);
 
         HashMap<String, String> args = new HashMap();
         LinkedHashMap<String, Object> response;
@@ -71,25 +70,41 @@ public class SignUpCommandTest {
         assertEquals("Sign up should have failed as missing information", (Boolean) response.get("success"), false);
         assertEquals("Error message indicants that user missing information", response.get("errMsg"), "Missing information");
 
-        args.put("firstName", "walaa");
-        args.put("lastName", "bahaa");
+        args.put("firstName", firstName);
+        args.put("lastName", lastName);
 
         command = new SignUpCommand(args);
         response = command.execute();
         assertEquals("Sign up should have failed as user already exist", (Boolean) response.get("success"), false);
         assertEquals("Error message indicants that user already exist should returned", response.get("errMsg"), "This user already exists, Do you want to sign in?");
-
-        args.put("email", "edsdsdsf"); //Invalid email
+        email = "edsdsdsf";
+        args.put("email", email); //Invalid email
 
         command = new SignUpCommand(args);
         response = command.execute();
         assertEquals("Sign up should have failed because of invalid email", (Boolean) response.get("success"), false);
         assertEquals("Error message indicants that the used email is invalid", response.get("errMsg"), "Invalid Email");
-
-        args.put("email", "ahmed@gmail.com");
+        email = "ahmed@gmail.com";
+        args.put("email", email);
         command = new SignUpCommand(args);
         response = command.execute();
         assertEquals("Sign up should succeed", (Boolean) response.get("success"), true);
+
+        assertEquals("Sign up should succeed", (Boolean) response.get("success"), true);
+
+        UserProfile newUser = (UserProfile) arangoHandler.getUser((String) response.get("userId"));
+        assertEquals(String.format("Expected both users have the same email: %s", email), email, newUser.getEmail());
+        assertEquals(String.format("Expected both users have the same firstname: %s", firstName), firstName, newUser.getFirstName());
+        assertEquals(String.format("Expected both users have the same lastname: %s", lastName), lastName, newUser.getLastName());
+
+        mysqlHandler.connect();
+        User newUserSql = (User) mysqlHandler.getUserWithId((String) response.get("userId"));
+        assertEquals(String.format("Expected both users have the same email: %s", email), email, newUserSql.getEmail());
+        assertEquals(String.format("Expected both users have the same password: %s", password), SHA512.hash(password), newUserSql.getPassword());
+
+
+
+
     }
 
 }

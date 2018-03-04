@@ -89,7 +89,6 @@ public class MysqlHandler implements DatabaseHandler {
      * @return Model of the User or null if it is not found
      */
     public User getUserWithId(String id) {
-
         String query = "{CALL Get_User(?)}";
         CallableStatement statement = null;
         try {

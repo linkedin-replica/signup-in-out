@@ -99,6 +99,7 @@ public class ArangoHandler implements DatabaseHandler{
      */
     public Object getUser(String key) {
         /* Retrieve user profile */
+//        return collection.getDocument(key, UserProfile.class);
         return collection.getDocument(key, UserProfile.class);
     }
 
@@ -109,7 +110,7 @@ public class ArangoHandler implements DatabaseHandler{
 
         UserProfile userProfile = UserProfile.Instantiate();
 
-        userProfile.setId("1");
+//        userProfile.setKey("66");
         userProfile.setEmail("nabila.ahmed@gmail.com");
         userProfile.setFirstName("Nabila");
         userProfile.setLastName("Ahmed");
