@@ -43,11 +43,11 @@ public class SignInCommand extends abstraction.Command {
             databaseHandler.disconnect();
 
             if(user != null){
-                if(user.getString("password").equals(password)){
+                if(user.getPassword().equals(password)){
                     Map<String, Object> claims = new HashMap<String, Object>();
-                    claims.put("email", user.get("email"));
+                    claims.put("email", user.getEmail());
                     claims.put("scope", "self/groups/admins");
-                    response = JwtUtils.generateToken(claims, user.getString("id"),
+                    response = JwtUtils.generateToken(claims, user.getId(),
                             60);
                     return response;
                 }else

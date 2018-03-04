@@ -59,9 +59,7 @@ public class SignUpCommand extends abstraction.Command {
                 LOGGER.warn("Invalid email");
                 errMsg =  "Invalid Email";
             } else{
-                User newUser= new User();
-                newUser.set("email", email);
-                newUser.set("password", password);
+                User newUser = new User(email, password);
                 String key = sqldbHandler.createUser(newUser); // use this key as the id of Userprofile object
 
                 nosqldbHandler.connect();

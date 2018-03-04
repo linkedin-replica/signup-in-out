@@ -28,8 +28,6 @@ public class SignInCommandTest {
     private void cleanUp()
     {
         mysqlHandler.connect();
-        User.deleteAll();
-        mysqlHandler.disconnect();
     }
 
     @After

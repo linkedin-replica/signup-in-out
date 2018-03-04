@@ -41,7 +41,7 @@ public class SignUpCommandTest {
     private void cleanUp()
     {
         mysqlHandler.connect();
-        User.deleteAll();
+//        User.deleteAll();
     }
 
     @After
@@ -55,10 +55,10 @@ public class SignUpCommandTest {
     public void execute() {
         String email = "Esraa.Khaled@golokoz.com";
         String password = "SokarNbat";
-        User user = new User();
-        user.set("email", email);
-        user.set("password", password);
-        user.saveIt();
+//        User user = new User();
+//        user.set("email", email);
+//        user.set("password", password);
+//        user.saveIt();
 
         HashMap<String, String> args = new HashMap();
         LinkedHashMap<String, Object> response;
