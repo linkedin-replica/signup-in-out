@@ -1,10 +1,11 @@
-package commands;
+package com.linkedin.replica.signUpInOut.commands.impl;
 
-import database.DatabaseHandler;
-import database.MysqlHandler;
-import model.User;
-import utils.JwtUtils;
-import utils.SHA512;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.models.User;
+import com.linkedin.replica.signUpInOut.utils.JwtUtils;
+import com.linkedin.replica.signUpInOut.utils.SHA512;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,14 +13,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SignInCommand extends abstraction.Command {
+public class SignInCommand extends Command {
 
     private DatabaseHandler databaseHandler;
     private static final Logger LOGGER = LogManager.getLogger(SignInCommand.class.getName());
 
     public SignInCommand(HashMap<String, String> args) {
         super(args);
-        databaseHandler = (MysqlHandler) this.dbHandlers.get("sqldbHandler");
+        databaseHandler = (MysqlDatabaseHandler) this.dbHandlers.get("sqldbHandler");
 
     }
 

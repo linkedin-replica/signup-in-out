@@ -1,4 +1,4 @@
-package model;
+package com.linkedin.replica.signUpInOut.models;
 
 import com.arangodb.entity.DocumentField;
 

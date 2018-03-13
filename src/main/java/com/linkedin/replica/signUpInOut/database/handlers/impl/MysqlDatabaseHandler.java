@@ -1,22 +1,23 @@
-package database;
+package com.linkedin.replica.signUpInOut.database.handlers.impl;
 
-import model.User;
+import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
+import com.linkedin.replica.signUpInOut.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.ConfigReader;
+import com.linkedin.replica.signUpInOut.utils.ConfigReader;
 
 import java.sql.*;
 import java.util.Properties;
 
-public class MysqlHandler implements DatabaseHandler {
+public class MysqlDatabaseHandler implements DatabaseHandler {
 
-    private static final Logger LOGGER = LogManager.getLogger(MysqlHandler.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(MysqlDatabaseHandler.class.getName());
     private String driverName, url, username, password;
     private Connection mysqlConnection;
     /**
-     * Initialize the attributes of the database from the config file
+     * Initialize the attributes of the com.linkedin.replica.signUpInOut.database from the config file
      */
-    public MysqlHandler() {
+    public MysqlDatabaseHandler() {
         Properties config = ConfigReader.readConfig();
         driverName = config.getProperty("development.driver");
         url = config.getProperty("development.url");

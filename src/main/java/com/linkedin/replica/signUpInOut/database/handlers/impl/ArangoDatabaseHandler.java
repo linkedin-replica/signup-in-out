@@ -1,28 +1,28 @@
-package database;
+package com.linkedin.replica.signUpInOut.database.handlers.impl;
 
 import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
-import model.User;
-import model.UserProfile;
+import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
+import com.linkedin.replica.signUpInOut.models.UserProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Properties;
-import static utils.ConfigReader.readConfig;
+import static com.linkedin.replica.signUpInOut.utils.ConfigReader.readConfig;
 
-public class ArangoHandler implements DatabaseHandler{
+public class ArangoDatabaseHandler implements DatabaseHandler {
 
-    private static final Logger LOGGER = LogManager.getLogger(ArangoHandler.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ArangoDatabaseHandler.class.getName());
 
     private Properties configProps;
     private ArangoDB arangoDriver;
     private ArangoDatabase database;
     private ArangoCollection collection;
-    private static ArangoHandler dbConnection; //
+    private static ArangoDatabaseHandler dbConnection; //
 
 
-    public ArangoHandler(){
+    public ArangoDatabaseHandler(){
         configProps = readConfig();
         initializeArangoDB();
     }
@@ -38,9 +38,9 @@ public class ArangoHandler implements DatabaseHandler{
      * Get a singleton DB instance
      * @return The DB instance
      */
-    public static ArangoHandler getDBConnection() {
+    public static ArangoDatabaseHandler getDBConnection() {
         if(dbConnection == null)
-            dbConnection = new ArangoHandler();
+            dbConnection = new ArangoDatabaseHandler();
         return dbConnection;
     }
 
@@ -59,15 +59,15 @@ public class ArangoHandler implements DatabaseHandler{
         /* Select driver */
         arangoDriver = getDBConnection().getArangoDriver();
 
-        /* If database does not exist */
+        /* If com.linkedin.replica.signUpInOut.database does not exist */
         if (!arangoDriver.getDatabases().contains(databaseName)) {
-            /* Create database */
+            /* Create com.linkedin.replica.signUpInOut.database */
             arangoDriver.createDatabase(databaseName);
             /* Create collection */
             arangoDriver.db(databaseName).createCollection(collectionName);
         }
 
-        /* Select database */
+        /* Select com.linkedin.replica.signUpInOut.database */
         database = arangoDriver.db(databaseName);
         /* Select collection */
         collection = database.collection(collectionName);
@@ -83,7 +83,7 @@ public class ArangoHandler implements DatabaseHandler{
 
     /**
      * Creates user profile
-     * @return string key for entry in database
+     * @return string key for entry in com.linkedin.replica.signUpInOut.database
      */
     public String createUser(Object user) {
         UserProfile userProfile= (UserProfile) user;
@@ -94,7 +94,7 @@ public class ArangoHandler implements DatabaseHandler{
 
 
     /**
-     * Retrieves user profile by arango database key
+     * Retrieves user profile by arango com.linkedin.replica.signUpInOut.database key
      * @return UserProfile
      */
     public Object getUser(String key) {
@@ -105,7 +105,7 @@ public class ArangoHandler implements DatabaseHandler{
 
     //TODO: Delete Later
     public static void main(String[] args) {
-        ArangoHandler handler = new ArangoHandler();
+        ArangoDatabaseHandler handler = new ArangoDatabaseHandler();
         handler.connect();
 
         UserProfile userProfile = UserProfile.Instantiate();

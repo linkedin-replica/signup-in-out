@@ -1,13 +1,12 @@
-package tests;
+package com.linkedin.replica.signUpInOut.tests;
 
-import abstraction.Command;
-import database.MysqlHandler;
-import model.User;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import commands.SignOutCommand;
-import utils.JwtUtils;
+import com.linkedin.replica.signUpInOut.commands.impl.SignOutCommand;
+import com.linkedin.replica.signUpInOut.utils.JwtUtils;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,18 +15,18 @@ import static org.junit.Assert.*;
 
 public class SignOutCommandTest {
 
-    private static MysqlHandler mysqlHandler;
+    private static MysqlDatabaseHandler mysqlDatabaseHandler;
     private static Command command;
 
     @Before
     public void setUp() throws Exception {
-        mysqlHandler = new MysqlHandler();
+        mysqlDatabaseHandler = new MysqlDatabaseHandler();
         cleanUp();
     }
 
     private void cleanUp()
     {
-        mysqlHandler.connect();
+        mysqlDatabaseHandler.connect();
     }
 
     @After

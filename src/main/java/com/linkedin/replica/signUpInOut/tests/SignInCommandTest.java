@@ -1,13 +1,12 @@
-package tests;
+package com.linkedin.replica.signUpInOut.tests;
 
-import abstraction.Command;
-import database.MysqlHandler;
-import model.User;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import commands.SignInCommand;
-import utils.SHA512;
+import com.linkedin.replica.signUpInOut.commands.impl.SignInCommand;
+import com.linkedin.replica.signUpInOut.utils.SHA512;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,18 +15,18 @@ import static org.junit.Assert.*;
 
 public class SignInCommandTest {
 
-    private static MysqlHandler mysqlHandler;
+    private static MysqlDatabaseHandler mysqlDatabaseHandler;
     private static Command command;
 
     @Before
     public void setUp() throws Exception {
-        mysqlHandler = new MysqlHandler();
+        mysqlDatabaseHandler = new MysqlDatabaseHandler();
         cleanUp();
     }
 
     private void cleanUp()
     {
-        mysqlHandler.connect();
+        mysqlDatabaseHandler.connect();
     }
 
     @After
@@ -53,9 +52,9 @@ public class SignInCommandTest {
 
         args.put("email", email);
 
-        mysqlHandler.connect();
-        mysqlHandler.createUser(email, SHA512.hash(password));
-        mysqlHandler.disconnect();
+        mysqlDatabaseHandler.connect();
+        mysqlDatabaseHandler.createUser(email, SHA512.hash(password));
+        mysqlDatabaseHandler.disconnect();
 
         args.put("password", "dragonballSuper");
         command = new SignInCommand(args);

@@ -1,29 +1,29 @@
-package tests;
+package com.linkedin.replica.signUpInOut.tests;
 
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
-import database.ArangoHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoDatabaseHandler;
 import org.junit.*;
 
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
-import static utils.ConfigReader.readConfig;
-import model.UserProfile;
+import static com.linkedin.replica.signUpInOut.utils.ConfigReader.readConfig;
+import com.linkedin.replica.signUpInOut.models.UserProfile;
 
-public class ArangoHandlerTest {
+public class ArangoDatabaseHandlerTest {
 
-    private static ArangoHandler arangoHandler;
+    private static ArangoDatabaseHandler arangoDatabaseHandler;
     private static ArangoDatabase arangoDb;
     static Properties config;
 
     @BeforeClass
     public static void init() {
         config = readConfig();
-        arangoHandler = new ArangoHandler();
-        arangoHandler.connect();
-        arangoDb = arangoHandler.getDBConnection().getArangoDriver().db(
+        arangoDatabaseHandler = new ArangoDatabaseHandler();
+        arangoDatabaseHandler.connect();
+        arangoDb = arangoDatabaseHandler.getDBConnection().getArangoDriver().db(
                 config.getProperty("db.name")
         );
     }
@@ -51,7 +51,7 @@ public class ArangoHandlerTest {
         userProfile.setLastName("Ahmed");
 
 
-        String userId = arangoHandler.createUser(userProfile);
+        String userId = arangoDatabaseHandler.createUser(userProfile);
         assertEquals(String.format("The user of email: %s should exist in users collection", email), arangoDb.collection(config.getProperty("collection.users.name")).documentExists(userId), true);
 
         arangoDb.collection(config.getProperty("collection.users.name")).deleteDocument(userId);
@@ -74,7 +74,7 @@ public class ArangoHandlerTest {
 
         DocumentCreateEntity user = arangoDb.collection(config.getProperty("collection.users.name")).insertDocument(userProfile);
 
-        UserProfile newUser = (UserProfile) arangoHandler.getUser(key);
+        UserProfile newUser = (UserProfile) arangoDatabaseHandler.getUser(key);
         assertEquals(String.format("Expected both users have the same email: %s", email), email, newUser.getEmail());
         assertEquals(String.format("Expected both users have the same firstname: %s", firstname), firstname, newUser.getFirstName());
         assertEquals(String.format("Expected both users have the same lastname: %s", lastname), lastname, newUser.getLastName());
@@ -87,6 +87,6 @@ public class ArangoHandlerTest {
     @AfterClass
     public static void clean(){
 
-        arangoHandler.getDBConnection().disconnect();
+        arangoDatabaseHandler.getDBConnection().disconnect();
     }
 }

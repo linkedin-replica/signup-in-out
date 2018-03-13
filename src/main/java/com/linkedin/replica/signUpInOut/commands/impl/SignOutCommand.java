@@ -1,13 +1,14 @@
-package commands;
+package com.linkedin.replica.signUpInOut.commands.impl;
 
-import utils.JwtUtils;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.utils.JwtUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class SignOutCommand extends abstraction.Command {
+public class SignOutCommand extends Command {
 
     private static final Logger LOGGER = LogManager.getLogger(SignOutCommand.class.getName());
 

@@ -1,17 +1,15 @@
-package database;
-
-import model.User;
+package com.linkedin.replica.signUpInOut.database.handlers;
 
 public interface DatabaseHandler {
 
     /**
-     * Initiate a connection with the database
+     * Initiate a connection with the com.linkedin.replica.signUpInOut.database
      */
     void connect();
 
 
     /**
-     * Close a connection with the database
+     * Close a connection with the com.linkedin.replica.signUpInOut.database
      */
     void disconnect();
 

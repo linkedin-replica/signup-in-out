@@ -1,4 +1,4 @@
-package utils;
+package com.linkedin.replica.signUpInOut.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -23,7 +23,7 @@ public class JwtUtils {
     /**
      * Generate jwt token based on claims, id of user to be authenticated and expiration duration
      * @param claims key-value pair to be put in the token body
-     * @param userId id of user in mysql database
+     * @param userId id of user in mysql com.linkedin.replica.signUpInOut.database
      * @param secretKey key to be for signing the token
      * @param minToExpire time in minutes this token will be valid
      * @return map holding token, error message and success boolean
@@ -59,7 +59,7 @@ public class JwtUtils {
     /**
      * Generate jwt token based on claims, id of user to be authenticated and expiration duration
      * @param claims key-value pair to be put in the token body
-     * @param userId id of user in mysql database
+     * @param userId id of user in mysql com.linkedin.replica.signUpInOut.database
      * @param minToExpire time in minutes this token will be valid
      * @return map holding token, error message and success boolean
      */

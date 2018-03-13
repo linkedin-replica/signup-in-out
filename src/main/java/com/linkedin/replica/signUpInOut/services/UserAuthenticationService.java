@@ -1,10 +1,10 @@
-package services;
+package com.linkedin.replica.signUpInOut.services;
 
-import abstraction.Command;
-import database.DatabaseHandler;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.ConfigReader;
+import com.linkedin.replica.signUpInOut.utils.ConfigReader;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +27,7 @@ public class UserAuthenticationService {
 
     public LinkedHashMap<String, Object> serve(String commandName, HashMap<String, String> args) {
         String commandClassString  = config.getProperty(commandName);
-        String commandsPackageName = appConfig.getProperty("package.commands");
+        String commandsPackageName = appConfig.getProperty("package.com.linkedin.replica.signUpInOut.commands");
         String commandClassFullStr = commandsPackageName + '.' + commandClassString;
 
         try{
@@ -42,7 +42,7 @@ public class UserAuthenticationService {
             Class<?> sqlHandlerClass = Class.forName(handlersPackageName + '.' + appConfig.get("handler.sql"));
             DatabaseHandler sqlHandler = (DatabaseHandler) sqlHandlerClass.newInstance();
 
-            command.setDbHandlers(sqlHandler, noSqlHandler); // @TODO: Fix that both database handlers are added in all commands
+            command.setDbHandlers(sqlHandler, noSqlHandler); // @TODO: Fix that both com.linkedin.replica.signUpInOut.database handlers are added in all com.linkedin.replica.signUpInOut.commands
 
             return command.execute();
 

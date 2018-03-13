@@ -1,19 +1,20 @@
-package commands;
+package com.linkedin.replica.signUpInOut.commands.impl;
 
-import database.ArangoHandler;
-import database.DatabaseHandler;
-import database.MysqlHandler;
-import model.User;
-import model.UserProfile;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoDatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.models.User;
+import com.linkedin.replica.signUpInOut.models.UserProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.SHA512;
+import com.linkedin.replica.signUpInOut.utils.SHA512;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class SignUpCommand extends abstraction.Command {
+public class SignUpCommand extends Command {
 
     private DatabaseHandler sqldbHandler;
     private DatabaseHandler nosqldbHandler;
@@ -22,8 +23,8 @@ public class SignUpCommand extends abstraction.Command {
 
     public SignUpCommand(HashMap<String, String> args){
         super(args);
-        sqldbHandler = (MysqlHandler) this.dbHandlers.get("sqldbHandler");
-        nosqldbHandler = (ArangoHandler) this.dbHandlers.get("nosqldbHandler");
+        sqldbHandler = (MysqlDatabaseHandler) this.dbHandlers.get("sqldbHandler");
+        nosqldbHandler = (ArangoDatabaseHandler) this.dbHandlers.get("nosqldbHandler");
     }
 
     /**
@@ -35,7 +36,7 @@ public class SignUpCommand extends abstraction.Command {
     }
 
     /**
-     * Handle the sign up process and generate the ID of the inserted user to be used accross services
+     * Handle the sign up process and generate the ID of the inserted user to be used accross com.linkedin.replica.signUpInOut.services
      * @return Response with result and error message if an error occurs
      */
     public LinkedHashMap<String, Object> execute() {

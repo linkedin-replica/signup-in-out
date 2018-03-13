@@ -1,4 +1,4 @@
-package utils;
+package com.linkedin.replica.signUpInOut.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-    private static final String FilePath = "src/main/resources/database.config";
+    private static final String FilePath = "src/main/resources/com.linkedin.replica.signUpInOut.database.config";
 
     private static final Logger LOGGER = LogManager.getLogger(ConfigReader.class.getName());
 
@@ -16,7 +16,7 @@ public class ConfigReader {
         return readConfig(FilePath);
     }
     public static Properties readCommandConfig(){
-        return readConfig("src/main/resources/commands.config");
+        return readConfig("src/main/resources/com.linkedin.replica.signUpInOut.commands.config");
     }
     public static Properties readAppConfig(){
         return readConfig("src/main/resources/app.config");

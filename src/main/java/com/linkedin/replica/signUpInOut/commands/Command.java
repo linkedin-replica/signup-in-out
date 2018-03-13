@@ -1,8 +1,6 @@
-package abstraction;
+package com.linkedin.replica.signUpInOut.commands;
 
-import database.ArangoHandler;
-import database.DatabaseHandler;
-import database.MysqlHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,8 +11,8 @@ public abstract class Command {
 
     public Command(HashMap<String, String> args) {
         this.args = args;
-        //TODO: remove this line. the service will call it instead !! only leave on tests
-//        setDbHandlers(new MysqlHandler(), new ArangoHandler());
+        //TODO: remove this line. the service will call it instead !! only leave on com.linkedin.replica.signUpInOut.tests
+//        setDbHandlers(new MysqlDatabaseHandler(), new ArangoDatabaseHandler());
     }
 
     public void setDbHandlers(DatabaseHandler sqldbHandler, DatabaseHandler nosqldbHandler) {

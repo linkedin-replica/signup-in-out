@@ -1,38 +1,38 @@
-package tests;
+package com.linkedin.replica.signUpInOut.tests;
 
-import abstraction.Command;
 import com.arangodb.ArangoDatabase;
-import database.ArangoHandler;
-import database.MysqlHandler;
-import model.User;
-import model.UserProfile;
+import com.linkedin.replica.signUpInOut.commands.Command;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoDatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.models.User;
+import com.linkedin.replica.signUpInOut.models.UserProfile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import commands.SignUpCommand;
-import utils.SHA512;
+import com.linkedin.replica.signUpInOut.commands.impl.SignUpCommand;
+import com.linkedin.replica.signUpInOut.utils.SHA512;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
-import static utils.ConfigReader.readConfig;
+import static com.linkedin.replica.signUpInOut.utils.ConfigReader.readConfig;
 
 public class SignUpCommandTest {
-    private static MysqlHandler mysqlHandler;
+    private static MysqlDatabaseHandler mysqlDatabaseHandler;
     private static Command command;
-    private static ArangoHandler arangoHandler;
+    private static ArangoDatabaseHandler arangoDatabaseHandler;
     private static ArangoDatabase arangoDb;
     static Properties config;
 
     @Before
     public void setUp() throws Exception {
-        mysqlHandler = new MysqlHandler();
+        mysqlDatabaseHandler = new MysqlDatabaseHandler();
         config = readConfig();
-        arangoHandler = new ArangoHandler();
-        arangoHandler.connect();
-        arangoDb = arangoHandler.getDBConnection().getArangoDriver().db(
+        arangoDatabaseHandler = new ArangoDatabaseHandler();
+        arangoDatabaseHandler.connect();
+        arangoDb = arangoDatabaseHandler.getDBConnection().getArangoDriver().db(
                 config.getProperty("db.name")
         );
         cleanUp();
@@ -40,14 +40,14 @@ public class SignUpCommandTest {
 
     private void cleanUp()
     {
-        mysqlHandler.connect();
+        mysqlDatabaseHandler.connect();
 //        User.deleteAll();
     }
 
     @After
     public void tearDown() throws Exception {
-        mysqlHandler.disconnect();
-        arangoHandler.getDBConnection().disconnect();
+        mysqlDatabaseHandler.disconnect();
+        arangoDatabaseHandler.getDBConnection().disconnect();
 
     }
 
@@ -57,7 +57,7 @@ public class SignUpCommandTest {
         String password = "SokarNbat";
         String firstName = "walaa";
         String lastName = "bahaa";
-        mysqlHandler.createUser(email, password);
+        mysqlDatabaseHandler.createUser(email, password);
 
         HashMap<String, String> args = new HashMap();
         LinkedHashMap<String, Object> response;
@@ -92,13 +92,13 @@ public class SignUpCommandTest {
 
         assertEquals("Sign up should succeed", (Boolean) response.get("success"), true);
 
-        UserProfile newUser = (UserProfile) arangoHandler.getUser((String) response.get("userId"));
+        UserProfile newUser = (UserProfile) arangoDatabaseHandler.getUser((String) response.get("userId"));
         assertEquals(String.format("Expected both users have the same email: %s", email), email, newUser.getEmail());
         assertEquals(String.format("Expected both users have the same firstname: %s", firstName), firstName, newUser.getFirstName());
         assertEquals(String.format("Expected both users have the same lastname: %s", lastName), lastName, newUser.getLastName());
 
-        mysqlHandler.connect();
-        User newUserSql = (User) mysqlHandler.getUserWithId((String) response.get("userId"));
+        mysqlDatabaseHandler.connect();
+        User newUserSql = (User) mysqlDatabaseHandler.getUserWithId((String) response.get("userId"));
         assertEquals(String.format("Expected both users have the same email: %s", email), email, newUserSql.getEmail());
         assertEquals(String.format("Expected both users have the same password: %s", password), SHA512.hash(password), newUserSql.getPassword());
 
