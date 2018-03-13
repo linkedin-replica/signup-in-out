@@ -59,7 +59,7 @@ public class MysqlHandler implements DatabaseHandler {
      * @return Model of the User or null if it is not found
      */
     public Object getUser(String email) {
-        String query = "{CALL Search_For_User(?)}";
+        String query = "{CALL search_for_user(?)}";
         CallableStatement statement = null;
         try {
 
@@ -89,7 +89,7 @@ public class MysqlHandler implements DatabaseHandler {
      * @return Model of the User or null if it is not found
      */
     public User getUserWithId(String id) {
-        String query = "{CALL Get_User(?)}";
+        String query = "{CALL get_user(?)}";
         CallableStatement statement = null;
         try {
             statement = mysqlConnection.prepareCall(query);
@@ -137,7 +137,7 @@ public class MysqlHandler implements DatabaseHandler {
      */
     public void deleteAll(){
 
-        String query = "{CALL Delete_Users()}";
+        String query = "{CALL delete_users()}";
         CallableStatement statement = null;
         try {
 

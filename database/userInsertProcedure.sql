@@ -16,46 +16,29 @@ DELIMITER //
  DELIMITER ;
 
 
- DROP PROCEDURE IF EXISTS `Dlelete_User`;
-
- DELIMITER $$
- CREATE PROCEDURE `Dlelete_User`(user_id int)
-   BEGIN
-     DELETE FROM users WHERE id = user_id;
-   END$$
- DELIMITER ;
-
-  DROP PROCEDURE IF EXISTS `Delete_Users`;
+  DROP PROCEDURE IF EXISTS `delete_users`;
 
   DELIMITER $$
-  CREATE PROCEDURE `Delete_Users`()
+  CREATE PROCEDURE `delete_users`()
     BEGIN
       DELETE FROM users;
     END$$
   DELIMITER ;
 
 
- DROP procedure IF EXISTS `Search_For_User`;
+ DROP procedure IF EXISTS `search_for_user`;
  DELIMITER $$
- CREATE PROCEDURE `Search_For_User`(user_email varchar(50))
+ CREATE PROCEDURE `search_for_user`(user_email varchar(50))
    BEGIN
      SELECT * FROM users WHERE email = user_email;
    END$$
  DELIMITER ;
 
- DROP procedure IF EXISTS `Get_User`;
+ DROP procedure IF EXISTS `get_user`;
  DELIMITER $$
- CREATE PROCEDURE `Get_User`(user_id int)
+ CREATE PROCEDURE `get_user`(user_id int)
    BEGIN
       SELECT * FROM users WHERE id = user_id;
-   END$$
- DELIMITER ;
-
- DROP procedure IF EXISTS `Get_Users`;
- DELIMITER $$
- CREATE PROCEDURE `Get_Users`()
-   BEGIN
-      SELECT * FROM users;
    END$$
  DELIMITER ;
 
