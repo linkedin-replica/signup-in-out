@@ -3,16 +3,16 @@ package database;
 import model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.javalite.activejdbc.Base;
 import utils.ConfigReader;
 
+import java.sql.*;
 import java.util.Properties;
 
 public class MysqlHandler implements DatabaseHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(MysqlHandler.class.getName());
     private String driverName, url, username, password;
-
+    private Connection mysqlConnection;
     /**
      * Initialize the attributes of the database from the config file
      */
@@ -22,20 +22,34 @@ public class MysqlHandler implements DatabaseHandler {
         url = config.getProperty("development.url");
         username = config.getProperty("development.username");
         password = config.getProperty("development.password");
+        connect();
     }
 
     /**
      * Open the connection to the mysql db using config file's attributes
      */
     public void connect() {
-        Base.open(driverName, url, username, password);
+        if(mysqlConnection == null) {
+            try {
+                mysqlConnection = DriverManager.getConnection(url, username, password);
+            } catch (SQLException e) {
+                LOGGER.fatal("Couldn't connect to Mysql db");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
      * Close the connection
      */
     public void disconnect() {
-        Base.close();
+        if(mysqlConnection != null) {
+            try {
+                mysqlConnection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -45,7 +59,28 @@ public class MysqlHandler implements DatabaseHandler {
      * @return Model of the User or null if it is not found
      */
     public Object getUser(String email) {
-        return User.findFirst("email = ?", email);
+        String query = "{CALL Search_For_User(?)}";
+        CallableStatement statement = null;
+        try {
+
+            statement = mysqlConnection.prepareCall(query);
+            statement.setString(1, email);
+            statement.executeQuery();
+            ResultSet results = statement.getResultSet();
+            if (results.next())
+                return new User(""+ results.getInt("id"), results.getString("email"), results.getString("password"));
+
+        } catch (SQLException e) {
+            LOGGER.warn("User is not exist");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String createUser(Object tmp) {
+        User user = (User) tmp;
+        return createUser(user.getEmail(), user.getPassword());
     }
 
     /**
@@ -54,7 +89,22 @@ public class MysqlHandler implements DatabaseHandler {
      * @return Model of the User or null if it is not found
      */
     public User getUserWithId(String id) {
-        return User.findFirst("id=?", id);
+        String query = "{CALL Get_User(?)}";
+        CallableStatement statement = null;
+        try {
+            statement = mysqlConnection.prepareCall(query);
+            statement.setString(1, id);
+            statement.executeQuery();
+            ResultSet results = statement.getResultSet();
+            if (results.next())
+                return new User(""+ results.getInt("id"), results.getString("email"), results.getString("password"));
+
+        } catch (SQLException e) {
+            LOGGER.warn("User is not exist");
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 
@@ -65,25 +115,20 @@ public class MysqlHandler implements DatabaseHandler {
      * @return user id
      */
     public String createUser(String email, String password) {
-        User user = new User();
-        user.set("email", email);
-        user.set("password", password);
-        return this.createUser(user);
-    }
-
-    /**
-     * Create a user in db if it isn't exist
-     * @param tmpUser
-     * @return Created user id in db
-     */
-    public String createUser(Object tmpUser) {
-        User user = (User) tmpUser;
+        String query = "{CALL Insert_User(?, ?)}";
+        CallableStatement statement = null;
         try {
-            user.saveIt();
-        }catch (org.javalite.activejdbc.DBException e){
-            LOGGER.warn(String.format("User of email: %s, already registered", user.getString("email")));
+
+            statement = mysqlConnection.prepareCall(query);
+            statement.setString(1, email);
+            statement.setString(2, password);
+            statement.executeQuery();
+
+        } catch (SQLException e) {
+
         }finally {
-            return ((User)getUser(user.getString("email"))).getString("id");
+
+            return "" + ((User) getUser(email)).getId();
         }
     }
 
@@ -91,6 +136,21 @@ public class MysqlHandler implements DatabaseHandler {
      * Delete all users from db
      */
     public void deleteAll(){
-        User.deleteAll();
+
+        String query = "{CALL Delete_Users()}";
+        CallableStatement statement = null;
+        try {
+
+            statement = mysqlConnection.prepareCall(query);
+            statement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+    public Connection getMysqlConnection() {
+        return mysqlConnection;
+    }
+
+
 }

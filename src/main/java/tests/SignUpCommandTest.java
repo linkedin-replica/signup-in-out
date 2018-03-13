@@ -41,7 +41,7 @@ public class SignUpCommandTest {
     private void cleanUp()
     {
         mysqlHandler.connect();
-        User.deleteAll();
+//        User.deleteAll();
     }
 
     @After
@@ -57,10 +57,7 @@ public class SignUpCommandTest {
         String password = "SokarNbat";
         String firstName = "walaa";
         String lastName = "bahaa";
-        User user = new User();
-        user.set("email", email);
-        user.set("password", password);
-        user.saveIt();
+        mysqlHandler.createUser(email, password);
 
         HashMap<String, String> args = new HashMap();
         LinkedHashMap<String, Object> response;
@@ -102,8 +99,8 @@ public class SignUpCommandTest {
 
         mysqlHandler.connect();
         User newUserSql = (User) mysqlHandler.getUserWithId((String) response.get("userId"));
-        assertEquals(String.format("Expected both users have the same email: %s", email), email, newUserSql.get("email"));
-        assertEquals(String.format("Expected both users have the same password: %s", password), SHA512.hash(password), newUserSql.get("password"));
+        assertEquals(String.format("Expected both users have the same email: %s", email), email, newUserSql.getEmail());
+        assertEquals(String.format("Expected both users have the same password: %s", password), SHA512.hash(password), newUserSql.getPassword());
 
 
 
