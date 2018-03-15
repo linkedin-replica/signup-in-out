@@ -2,8 +2,8 @@ package com.linkedin.replica.signUpInOut.tests;
 
 import com.arangodb.ArangoDatabase;
 import com.linkedin.replica.signUpInOut.commands.Command;
-import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoDatabaseHandler;
-import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoSigningHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signUpInOut.models.User;
 import com.linkedin.replica.signUpInOut.models.UserProfile;
 import org.junit.After;
@@ -16,21 +16,21 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 
+import static com.linkedin.replica.signUpInOut.utils.ConfigReader.readDatabaseConfig;
 import static org.junit.Assert.*;
-import static com.linkedin.replica.signUpInOut.utils.ConfigReader.readConfig;
 
 public class SignUpCommandTest {
-    private static MysqlDatabaseHandler mysqlDatabaseHandler;
+    private static MysqlSigningHandler mysqlDatabaseHandler;
     private static Command command;
-    private static ArangoDatabaseHandler arangoDatabaseHandler;
+    private static ArangoSigningHandler arangoDatabaseHandler;
     private static ArangoDatabase arangoDb;
     static Properties config;
 
     @Before
     public void setUp() throws Exception {
-        mysqlDatabaseHandler = new MysqlDatabaseHandler();
-        config = readConfig();
-        arangoDatabaseHandler = new ArangoDatabaseHandler();
+        mysqlDatabaseHandler = new MysqlSigningHandler();
+        config = readDatabaseConfig();
+        arangoDatabaseHandler = new ArangoSigningHandler();
         arangoDatabaseHandler.connect();
         arangoDb = arangoDatabaseHandler.getDBConnection().getArangoDriver().db(
                 config.getProperty("db.name")

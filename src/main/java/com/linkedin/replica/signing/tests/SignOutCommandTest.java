@@ -1,7 +1,7 @@
 package com.linkedin.replica.signUpInOut.tests;
 
 import com.linkedin.replica.signUpInOut.commands.Command;
-import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlSigningHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,12 +15,12 @@ import static org.junit.Assert.*;
 
 public class SignOutCommandTest {
 
-    private static MysqlDatabaseHandler mysqlDatabaseHandler;
+    private static MysqlSigningHandler mysqlDatabaseHandler;
     private static Command command;
 
     @Before
     public void setUp() throws Exception {
-        mysqlDatabaseHandler = new MysqlDatabaseHandler();
+        mysqlDatabaseHandler = new MysqlSigningHandler();
         cleanUp();
     }
 

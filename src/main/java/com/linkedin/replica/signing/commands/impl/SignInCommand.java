@@ -1,8 +1,8 @@
 package com.linkedin.replica.signUpInOut.commands.impl;
 
 import com.linkedin.replica.signUpInOut.commands.Command;
-import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
-import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.SigningHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signUpInOut.models.User;
 import com.linkedin.replica.signUpInOut.utils.JwtUtils;
 import com.linkedin.replica.signUpInOut.utils.SHA512;
@@ -15,12 +15,12 @@ import java.util.Map;
 
 public class SignInCommand extends Command {
 
-    private DatabaseHandler databaseHandler;
+    private SigningHandler signingHandler;
     private static final Logger LOGGER = LogManager.getLogger(SignInCommand.class.getName());
 
     public SignInCommand(HashMap<String, String> args) {
         super(args);
-        databaseHandler = (MysqlDatabaseHandler) this.dbHandlers.get("sqldbHandler");
+        signingHandler = (MysqlSigningHandler) this.dbHandlers.get("sqldbHandler");
 
     }
 
@@ -40,9 +40,9 @@ public class SignInCommand extends Command {
 
             String password = SHA512.hash(args.get("password"));
 
-            databaseHandler.connect();
-            User user = (User)databaseHandler.getUser(email);
-            databaseHandler.disconnect();
+            signingHandler.connect();
+            User user = (User) signingHandler.getUser(email);
+            signingHandler.disconnect();
 
             if(user != null){
                 if(user.getPassword().equals(password)){

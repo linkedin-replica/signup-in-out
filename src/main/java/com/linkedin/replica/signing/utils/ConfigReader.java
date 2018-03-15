@@ -8,18 +8,19 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-    private static final String FilePath = "src/main/resources/com.linkedin.replica.signUpInOut.database.config";
+    private static final String ConfigPath = "src/main/resources/config/";
 
     private static final Logger LOGGER = LogManager.getLogger(ConfigReader.class.getName());
 
-    public static Properties readConfig(){
-        return readConfig(FilePath);
+    public static Properties readDatabaseConfig(){
+        return readConfig(ConfigPath + "database.config");
     }
+
     public static Properties readCommandConfig(){
-        return readConfig("src/main/resources/com.linkedin.replica.signUpInOut.commands.config");
+        return readConfig(ConfigPath + "commands.config");
     }
     public static Properties readAppConfig(){
-        return readConfig("src/main/resources/app.config");
+        return readConfig(ConfigPath + "app.config");
     }
 
     public static Properties readConfig(String filePath){

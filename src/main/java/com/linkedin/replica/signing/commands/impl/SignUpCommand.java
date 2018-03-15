@@ -1,9 +1,9 @@
 package com.linkedin.replica.signUpInOut.commands.impl;
 
 import com.linkedin.replica.signUpInOut.commands.Command;
-import com.linkedin.replica.signUpInOut.database.handlers.DatabaseHandler;
-import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoDatabaseHandler;
-import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlDatabaseHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.SigningHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.ArangoSigningHandler;
+import com.linkedin.replica.signUpInOut.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signUpInOut.models.User;
 import com.linkedin.replica.signUpInOut.models.UserProfile;
 import org.apache.logging.log4j.LogManager;
@@ -16,15 +16,15 @@ import java.util.LinkedHashMap;
 
 public class SignUpCommand extends Command {
 
-    private DatabaseHandler sqldbHandler;
-    private DatabaseHandler nosqldbHandler;
+    private SigningHandler sqldbHandler;
+    private SigningHandler nosqldbHandler;
 
     private static final Logger LOGGER = LogManager.getLogger(SignUpCommand.class.getName());
 
     public SignUpCommand(HashMap<String, String> args){
         super(args);
-        sqldbHandler = (MysqlDatabaseHandler) this.dbHandlers.get("sqldbHandler");
-        nosqldbHandler = (ArangoDatabaseHandler) this.dbHandlers.get("nosqldbHandler");
+        sqldbHandler = (MysqlSigningHandler) this.dbHandlers.get("sqldbHandler");
+        nosqldbHandler = (ArangoSigningHandler) this.dbHandlers.get("nosqldbHandler");
     }
 
     /**
