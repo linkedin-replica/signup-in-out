@@ -1,4 +1,4 @@
-package com.linkedin.replica.signUpInOut.utils;
+package com.linkedin.replica.signing.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
