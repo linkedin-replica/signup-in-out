@@ -17,36 +17,26 @@ public class MysqlSigningHandler implements SigningHandler {
         dbInstance = DatabaseConnection.getInstance().getMysqlDriver();
     }
 
-    public User getUser(String email) {
+    public User getUser(String email) throws SQLException {
         User user = null;
-        try {
-            CallableStatement statement = dbInstance.prepareCall("{CALL search_for_user(?)}");
-            statement.setString(1, email);
-            statement.executeQuery();
-            ResultSet results = statement.getResultSet();
-            if (results.next()) {
-                user = new User();
-                user.setId("" + results.getInt("id"));
-                user.setEmail(results.getString("email"));
-                user.setPassword(results.getString("password"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            return user;
+        CallableStatement statement = dbInstance.prepareCall("{CALL search_for_user(?)}");
+        statement.setString(1, email);
+        statement.executeQuery();
+        ResultSet results = statement.getResultSet();
+        if (results.next()) {
+            user = new User();
+            user.setId("" + results.getInt("id"));
+            user.setEmail(results.getString("email"));
+            user.setPassword(results.getString("password"));
         }
+        return user;
     }
 
-    public String createUser(User user) {
-        try {
-            CallableStatement statement = dbInstance.prepareCall("{CALL Insert_User(?, ?)}");
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());
-            statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            return getUser(user.getEmail()).getId();
-        }
+    public String createUser(User user) throws SQLException {
+        CallableStatement statement = dbInstance.prepareCall("{CALL Insert_User(?, ?)}");
+        statement.setString(1, user.getEmail());
+        statement.setString(2, user.getPassword());
+        statement.executeQuery();
+        return getUser(user.getEmail()).getId();
     }
 }
