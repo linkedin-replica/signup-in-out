@@ -53,8 +53,4 @@ public class MysqlSigningHandler implements SigningHandler {
     public Connection getDbInstance(){
         return  dbInstance;
     }
-
-    public void del(){
-
-    }
 }
