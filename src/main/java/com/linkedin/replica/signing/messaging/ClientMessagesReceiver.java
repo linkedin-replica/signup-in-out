@@ -10,7 +10,6 @@ import com.linkedin.replica.signing.services.Workers;
 import com.rabbitmq.client.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -93,7 +92,6 @@ public class ClientMessagesReceiver {
                         LOGGER.error("json response in failed");
                     }
                 };
-
                 Workers.getInstance().submit(messageProcessorRunnable);
             }
         };
