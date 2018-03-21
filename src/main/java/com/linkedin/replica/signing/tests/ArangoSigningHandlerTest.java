@@ -1,6 +1,5 @@
 package com.linkedin.replica.signing.tests;
 
-import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.DocumentCreateEntity;
 import com.linkedin.replica.signing.database.handlers.impl.ArangoSigningHandler;
@@ -11,9 +10,6 @@ import com.linkedin.replica.signing.config.Configuration;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
