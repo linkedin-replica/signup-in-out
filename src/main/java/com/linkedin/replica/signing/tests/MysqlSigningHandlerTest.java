@@ -81,6 +81,17 @@ public class MysqlSigningHandlerTest {
         }
     }
 
+    public static void deleteUser(String email) {
+        try {
+            CallableStatement statement = mysqlDatabaseHandler.getDbInstance().prepareCall("{CALL delete_user(?)}");
+            statement.setString(1, email);
+            statement.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void testCreateUser() {
         String email = "Esraa.Khaled@golokoz.com";
@@ -92,7 +103,9 @@ public class MysqlSigningHandlerTest {
 
         String userId = mysqlDatabaseHandler.createUser(user);
 
-        assertEquals(String.format("The user of email: %s should exist in Users table", email), user.getEmail(), email);
+        User storedUser = getUser(email);
+        assertEquals(String.format("The user of email: %s should exist in Users table", email), storedUser.getEmail(), email);
+        assertEquals(String.format("Expected both users have the same password", password), storedUser.getPassword(), password);
 
         String duplicateUserId = createUser(user);
         assertEquals("Expected that the duplicate has the same id of the old one without exception", duplicateUserId, userId);
@@ -108,9 +121,9 @@ public class MysqlSigningHandlerTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        mysqlDatabaseHandler.createUser(user);
+        createUser(user);
 
-        User newUser = (User) getUser(email);
+        User newUser = mysqlDatabaseHandler.getUser(email);
         assertEquals(String.format("Expected both users have the same email", email), email, newUser.getEmail());
         assertEquals(String.format("Expected both users have the same password", password), password, newUser.getPassword());
 
