@@ -75,8 +75,8 @@ public class Configuration {
         return arangoConfig.getProperty(key);
     }
 
-    public String getMysqlConfigPath(String key) {
-        return arangoConfig.getProperty(key);
+    public String getMysqlConfigProp(String key) {
+        return mysqlConfig.getProperty(key);
     }
 
     public String getControllerConfigProp(String key) {
