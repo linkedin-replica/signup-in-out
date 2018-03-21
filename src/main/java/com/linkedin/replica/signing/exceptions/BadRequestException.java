@@ -1,7 +1,7 @@
 package com.linkedin.replica.signing.exceptions;
 
-public class SigningException extends RuntimeException{
-    public SigningException(String message){
+public class BadRequestException extends RuntimeException{
+    public BadRequestException(String message){
         super(message);
     }
 }

@@ -3,6 +3,7 @@ package com.linkedin.replica.signing.commands;
 import com.linkedin.replica.signing.database.handlers.DatabaseHandler;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -24,7 +25,7 @@ public abstract class Command {
      *
      * @return The output (if any) of the command
      */
-    public abstract LinkedHashMap<String, Object> execute();
+    public abstract Object execute() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
     protected void validateArgs(String[] requiredArgs) {
         for (String arg : requiredArgs)
