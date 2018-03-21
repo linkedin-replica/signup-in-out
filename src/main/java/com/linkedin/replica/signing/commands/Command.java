@@ -3,21 +3,23 @@ package com.linkedin.replica.signing.commands;
 import com.linkedin.replica.signing.database.handlers.DatabaseHandler;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public abstract class Command {
     protected HashMap<String, Object> args;
-    protected HashMap<String, DatabaseHandler> dbHandlers;
+    protected DatabaseHandler dbHandler;
 
 
     public Command(HashMap<String, Object> args) {
         this.args = args;
     }
 
-    public void addHandler(String dbHandlerType, DatabaseHandler dbHandler) {
-        dbHandlers.put(dbHandlerType, dbHandler);
+    public void addDatabaseHandler(DatabaseHandler dbHandler) {
+        this.dbHandler = dbHandler;
     }
 
     /**
@@ -25,7 +27,7 @@ public abstract class Command {
      *
      * @return The output (if any) of the command
      */
-    public abstract Object execute() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    public abstract Object execute() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, SQLException, UnsupportedEncodingException;
 
     protected void validateArgs(String[] requiredArgs) {
         for (String arg : requiredArgs)

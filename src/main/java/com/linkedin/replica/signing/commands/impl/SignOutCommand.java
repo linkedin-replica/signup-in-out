@@ -15,23 +15,15 @@ public class SignOutCommand extends Command {
 
     /**
      * Checks validity of token
-     * TODO: Don't propagate the respond from JWT.
+     * ATTENTION!!!!!
+     * The token will be already validated in the netty server
+     * this is only here for future redirection or additional stuff
      *
      * @return Return success boolean in response
      */
 
-    public LinkedHashMap<String, Object> execute() {
+    public Boolean execute() {
         validateArgs(new String[]{"jwtToken"});
-        LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
-
-        String jwtToken = (String) args.get("jwtToken");
-
-        if (jwtToken == null) {
-            response.put("errMsg", "Failure due to missing parameters while signing out");
-            response.put("success", false);
-        } else
-            response = JwtUtils.validateToken(jwtToken);
-
-        return response;
+        return JwtUtils.validateToken((String) args.get("jwtToken"));
     }
 }

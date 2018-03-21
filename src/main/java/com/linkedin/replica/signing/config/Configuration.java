@@ -61,7 +61,7 @@ public class Configuration {
         return Class.forName(commandClassPath);
     }
 
-    public Class getHandlerClass(String commandName) throws ClassNotFoundException {
+    public Class getDatabaseHandlerClass(String commandName) throws ClassNotFoundException {
         String handlerPackageName = SigningHandler.class.getPackage().getName() + ".impl";
         String handlerClassPath = handlerPackageName + "." + commandConfig.get(commandName + ".handler");
         return Class.forName(handlerClassPath);

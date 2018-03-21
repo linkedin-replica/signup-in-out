@@ -21,15 +21,9 @@ public class SigningService {
         Constructor constructor = commandClass.getConstructor(HashMap.class);
         Command command = (Command) constructor.newInstance(args);
 
-        if (commandName.equals("signing.signIn") || commandName.equals("signing.signUp")) {
-            Class<?> dbHandlerClass = config.getDatabaseHandlerClass(commandName + ".SQL");
-            command.addHandler("SQL", (DatabaseHandler) dbHandlerClass.newInstance());
-        }
+        Class<?> dbHandlerClass = config.getDatabaseHandlerClass(commandName);
+        command.addDatabaseHandler((DatabaseHandler) dbHandlerClass.newInstance());
 
-        if (commandName.equals("signing.signUp")) {
-            Class<?> dbHandlerClass = config.getDatabaseHandlerClass(commandName + ".noSQL");
-            command.addHandler("noSQL", (DatabaseHandler) dbHandlerClass.newInstance());
-        }
         return command.execute();
     }
 }
