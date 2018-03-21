@@ -15,6 +15,7 @@ import java.util.Map;
 public class SignInCommand extends abstraction.Command {
 
     private DatabaseHandler databaseHandler;
+    private static final long expiryDuration = 60 * 24 * 30 * 3; // 3 months
     private static final Logger LOGGER = LogManager.getLogger(SignInCommand.class.getName());
 
     public SignInCommand(HashMap<String, String> args) {
@@ -49,7 +50,7 @@ public class SignInCommand extends abstraction.Command {
                     claims.put("email", user.get("email"));
                     claims.put("scope", "self/groups/admins");
                     response = JwtUtils.generateToken(claims, user.getString("id"),
-                            60);
+                            expiryDuration);
                     return response;
                 }else
                     errMsg = "Incorrect password";
