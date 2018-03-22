@@ -1,5 +1,8 @@
 package com.linkedin.replica.signing.tests;
 
+import com.arangodb.ArangoCollection;
+import com.arangodb.entity.CollectionEntity;
+import com.arangodb.entity.DocumentCreateEntity;
 import com.linkedin.replica.signing.models.User;
 
 import java.sql.CallableStatement;
@@ -61,4 +64,16 @@ public class TestsUtils {
             e.printStackTrace();
         }
     }
+
+    static DocumentCreateEntity createUserArango(User user, ArangoCollection collection){
+        return collection.insertDocument(user);
+    }
+    static void deleteUserArango(String userId, ArangoCollection collection){
+        collection.deleteDocument(userId);
+    }
+
+    static User getUserArango(String userId, ArangoCollection collection) {
+        return collection.getDocument(userId, User.class);
+    }
+
 }
