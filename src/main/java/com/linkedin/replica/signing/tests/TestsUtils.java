@@ -65,14 +65,14 @@ public class TestsUtils {
         }
     }
 
-    static DocumentCreateEntity createUserArango(User user, ArangoCollection collection){
+    public static DocumentCreateEntity createUserArango(User user, ArangoCollection collection){
         return collection.insertDocument(user);
     }
-    static void deleteUserArango(String userId, ArangoCollection collection){
+    public static void deleteUserArango(String userId, ArangoCollection collection){
         collection.deleteDocument(userId);
     }
 
-    static User getUserArango(String userId, ArangoCollection collection) {
+    public static User getUserArango(String userId, ArangoCollection collection) {
         return collection.getDocument(userId, User.class);
     }
 

@@ -1,14 +1,12 @@
-package com.linkedin.replica.signing.tests;
+package com.linkedin.replica.signing.tests.core;
 
 import com.arangodb.ArangoCollection;
-import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
-import com.arangodb.ArangoEdgeCollection;
-import com.arangodb.entity.DocumentCreateEntity;
 import com.linkedin.replica.signing.database.handlers.impl.ArangoSqlSigningHandler;
 import com.linkedin.replica.signing.database.DatabaseConnection;
 import com.linkedin.replica.signing.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signing.models.User;
+import com.linkedin.replica.signing.tests.TestsUtils;
 import org.junit.*;
 import com.linkedin.replica.signing.config.Configuration;
 

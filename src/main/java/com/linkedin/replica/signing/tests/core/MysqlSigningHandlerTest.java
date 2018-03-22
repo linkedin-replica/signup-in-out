@@ -1,18 +1,17 @@
-package com.linkedin.replica.signing.tests;
+package com.linkedin.replica.signing.tests.core;
 
 import com.linkedin.replica.signing.config.Configuration;
 import com.linkedin.replica.signing.database.DatabaseConnection;
 import com.linkedin.replica.signing.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signing.models.User;
+import com.linkedin.replica.signing.tests.TestsUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
