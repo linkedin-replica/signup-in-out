@@ -31,7 +31,7 @@ public class Configuration {
                           String controllerConfigPath) throws IOException {
         populateWithConfig(this.appConfigPath = appConfigPath, appConfig);
         populateWithConfig(this.arangoConfigPath = arangoConfigPath, arangoConfig);
-        populateWithConfig(this.mysqlConfigPath = arangoConfigPath, mysqlConfig);
+        populateWithConfig(this.mysqlConfigPath = mysqlConfigPath, mysqlConfig);
         populateWithConfig(this.commandsConfigPath = commandsConfigPath, commandConfig);
         populateWithConfig(controllerConfigPath, controllerConfig);
 
