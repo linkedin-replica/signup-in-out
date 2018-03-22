@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import com.linkedin.replica.signing.config.Configuration;
+import com.linkedin.replica.signing.exceptions.BadRequestException;
+import com.linkedin.replica.signing.exceptions.SigningException;
 import com.linkedin.replica.signing.services.SigningService;
 import com.linkedin.replica.signing.services.Workers;
 import com.rabbitmq.client.*;
@@ -23,7 +25,6 @@ public class ClientMessagesReceiver {
     private SigningService signingService = new SigningService();
     private final String QUEUE_NAME = configuration.getAppConfigProp("rabbitmq.queue.client");
     private final String RABBIT_MQ_IP = configuration.getAppConfigProp("rabbitmq.ip");
-    private static final String[] attributes = {"email", "password", "jwtToken", "firstName", "lastName"};
 
     private ConnectionFactory factory;
     private Channel channel;
@@ -42,7 +43,6 @@ public class ClientMessagesReceiver {
         factory.setHost(RABBIT_MQ_IP);
         connection = factory.newConnection();
         channel = connection.createChannel();
-
         // declare the queue if it does not exist
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
         LOGGER.info("Started signing receiver successfully.");
@@ -58,6 +58,7 @@ public class ClientMessagesReceiver {
                     throws IOException {
 
                 Runnable messageProcessorRunnable = () -> {
+
                     // Create the response message properties
                     AMQP.BasicProperties replyProps = new AMQP.BasicProperties
                             .Builder()
@@ -66,19 +67,31 @@ public class ClientMessagesReceiver {
 
                     // Extract the request arguments
                     JsonObject object = new JsonParser().parse(new String(body)).getAsJsonObject();
+
                     String commandName = object.get("commandName").getAsString();
                     HashMap<String, String> args = new HashMap<String, String>();
-                    for (String attribute : attributes)
-                        args.put(attribute, object.get(attribute).getAsString());
+
+                    for (String key : object.keySet())
+                        if (!key.equals("commandName"))
+                            args.put(key, object.get(key).getAsString());
 
                     // Call the service and form the response
                     LinkedHashMap<String, Object> response = new LinkedHashMap<>();
 
                     try {
-                        LinkedHashMap<String, Object> results = (LinkedHashMap<String, Object>) signingService.serve(commandName, args);
+                        Object results = signingService.serve(commandName, args);
                         response.put("results", results);
                         response.put("statusCode", 200);
+                    } catch (BadRequestException e) {
+                        // set status code to 400
+                        response.put("statusCode", 400);
+                        response.put("error", e.getMessage());
+                    } catch (SigningException e) {
+                        // set status code to 401
+                        response.put("statusCode", 401);
+                        response.put("error", e.getMessage());
                     } catch (Exception e) {
+                        e.printStackTrace();
                         response.put("statusCode", 500);
                         response.put("error", "Internal server error.");
                         LOGGER.error("Authentication service failed");
@@ -95,6 +108,7 @@ public class ClientMessagesReceiver {
                 Workers.getInstance().submit(messageProcessorRunnable);
             }
         };
+        channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 
     // Method below not needed

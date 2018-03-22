@@ -4,6 +4,7 @@ import com.linkedin.replica.signing.commands.Command;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 import com.linkedin.replica.signing.exceptions.SigningException;
 import com.linkedin.replica.signing.models.User;
+import com.linkedin.replica.signing.tests.TestsUtils;
 import com.linkedin.replica.signing.utils.JwtUtils;
 import com.linkedin.replica.signing.utils.SHA512;
 
@@ -28,12 +29,10 @@ public class SignInCommand extends Command {
 
     public String execute() throws SQLException, UnsupportedEncodingException {
         validateArgs(new String[]{"email", "password"});
-
         SigningHandler signingHandler = (SigningHandler) dbHandler;
         String email = (String) args.get("email");
         String password = SHA512.hash((String) args.get("password"));
         User user = signingHandler.getUser(email);
-
         if (user != null && user.getPassword().equals(password)) {
             Map<String, Object> claims = new HashMap<String, Object>();
             claims.put("email", user.getEmail());

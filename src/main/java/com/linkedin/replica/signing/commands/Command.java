@@ -2,6 +2,7 @@ package com.linkedin.replica.signing.commands;
 
 import com.linkedin.replica.signing.database.handlers.DatabaseHandler;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
+import com.linkedin.replica.signing.exceptions.BadRequestException;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -31,9 +32,9 @@ public abstract class Command {
 
     protected void validateArgs(String[] requiredArgs) {
         for (String arg : requiredArgs)
-            if (!args.containsKey(arg)) {
+            if (!args.containsKey(arg) || args.get(arg) == null) {
                 String exceptionMsg = String.format("Cannot execute command. %s argument is missing", arg);
-                throw new IllegalArgumentException(exceptionMsg);
+                throw new BadRequestException(exceptionMsg);
             }
     }
 }
