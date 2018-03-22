@@ -40,7 +40,4 @@ public class MysqlSigningHandler implements SigningHandler {
         return getUser(user.getEmail()).getId();
     }
 
-    public Connection getDbInstance(){
-        return  dbInstance;
-    }
 }

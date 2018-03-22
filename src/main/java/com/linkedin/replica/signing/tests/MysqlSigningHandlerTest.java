@@ -1,4 +1,5 @@
 package com.linkedin.replica.signing.tests;
+
 import com.linkedin.replica.signing.config.Configuration;
 import com.linkedin.replica.signing.database.DatabaseConnection;
 import com.linkedin.replica.signing.database.handlers.impl.MysqlSigningHandler;
@@ -10,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -17,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 public class MysqlSigningHandlerTest {
     private static MysqlSigningHandler mysqlDatabaseHandler;
+    private static Connection dbInstance;
     static Configuration config;
 
     @BeforeClass
@@ -25,76 +28,27 @@ public class MysqlSigningHandlerTest {
         Configuration.init(rootFolder + "app.config",
                 rootFolder + "arango.config",
                 rootFolder + "mysql.config",
-                rootFolder + "command.config");
+                rootFolder + "command.config",
+                rootFolder + "controller.config");
 
         DatabaseConnection.init();
+        dbInstance = DatabaseConnection.getInstance().getMysqlDriver();
         config = Configuration.getInstance();
 
-        mysqlDatabaseHandler= new MysqlSigningHandler();
+        mysqlDatabaseHandler = new MysqlSigningHandler();
     }
 
     @Before
-    public void beforeEach()  {
-        deleteUsers();
+    public void beforeEach() {
+        TestsUtils.deleteUsersSQL(dbInstance);
     }
 
 
-    public static User getUser(String email) {
-        User user = null;
-        try {
-            CallableStatement statement = mysqlDatabaseHandler.getDbInstance().prepareCall("{CALL search_for_user(?)}");
-            statement.setString(1, email);
-            statement.executeQuery();
-            ResultSet results = statement.getResultSet();
-            if (results.next()) {
-                user = new User();
-                user.setId("" + results.getInt("id"));
-                user.setEmail(results.getString("email"));
-                user.setPassword(results.getString("password"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            return user;
-        }
-    }
 
-    public static String createUser(User user) {
-        try {
-            CallableStatement statement = mysqlDatabaseHandler.getDbInstance().prepareCall("{CALL Insert_User(?, ?)}");
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());
-            statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            return getUser(user.getEmail()).getId();
-        }
-    }
-
-    public static void deleteUsers() {
-        try {
-            CallableStatement statement = mysqlDatabaseHandler.getDbInstance().prepareCall("{CALL delete_users()}");
-            statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteUser(String email) {
-        try {
-            CallableStatement statement = mysqlDatabaseHandler.getDbInstance().prepareCall("{CALL delete_user(?)}");
-            statement.setString(1, email);
-            statement.executeQuery();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
-    public void testCreateUser() {
-        String email = "Esraa.Khaled@golokoz.com";
+    public void testCreateUser() throws SQLException {
+        String email = "example.mail@gmail.com";
         String password = "SokarNbat";
 
         User user = new User();
@@ -103,25 +57,44 @@ public class MysqlSigningHandlerTest {
 
         String userId = mysqlDatabaseHandler.createUser(user);
 
-        User storedUser = getUser(email);
+        User storedUser = TestsUtils.getUserSQL(email, dbInstance);
         assertEquals(String.format("The user of email: %s should exist in Users table", email), storedUser.getEmail(), email);
         assertEquals(String.format("Expected both users have the same password", password), storedUser.getPassword(), password);
-
-        String duplicateUserId = createUser(user);
-        assertEquals("Expected that the duplicate has the same id of the old one without exception", duplicateUserId, userId);
 
     }
 
     @Test
-    public void testGetUser() {
-
-        String email = "Esraa.Khaled@golokoz.com";
+    public void testCreateUserDuplicate() {
+        String email = "example.mail@gmail.com";
         String password = "SokarNbat";
 
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        createUser(user);
+
+        TestsUtils.createUserSQL(user, dbInstance);
+
+
+        boolean duplicateException = false;
+        try {
+            mysqlDatabaseHandler.createUser(user);
+        } catch (SQLException e) {
+            duplicateException = true;
+        }
+        assertEquals("Expected a duplicate exception", duplicateException, true);
+
+    }
+
+    @Test
+    public void testGetUser() throws SQLException {
+
+        String email = "example.mail@gmail.com";
+        String password = "SokarNbat";
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        TestsUtils.createUserSQL(user, dbInstance);
 
         User newUser = mysqlDatabaseHandler.getUser(email);
         assertEquals(String.format("Expected both users have the same email", email), email, newUser.getEmail());
