@@ -37,15 +37,15 @@ public class DatabaseConnection {
 
     private void initializeArangoDB() {
         arangoDriver = new ArangoDB.Builder()
-                .user(config.getArangoConfig("arangodb.user"))
-                .password(config.getArangoConfig("arangodb.password"))
+                .user(config.getArangoConfigProp("arangodb.user"))
+                .password(config.getArangoConfigProp("arangodb.password"))
                 .build();
     }
 
     private void initializeMysqlDB() throws SQLException {
-        mysqlDriver = DriverManager.getConnection(config.getMysqlConfig("mysql.url"),
-                config.getMysqlConfig("mysql.username"),
-                config.getMysqlConfig("mysql.password"));
+        mysqlDriver = DriverManager.getConnection(config.getMysqlConfigProp("mysql.url"),
+                config.getMysqlConfigProp("mysql.username"),
+                config.getMysqlConfigProp("mysql.password"));
     }
 
 

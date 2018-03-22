@@ -11,10 +11,10 @@ public class Main {
     public void start(String... args) throws ClassNotFoundException, IOException, SQLException {
         if (args.length != 4)
             throw new IllegalArgumentException("Expected four arguments. 1- App config file path "
-                    + "2- Arango config file path 3- Mysql config file path 4- Command config file path");
+                    + "2- Arango config file path 3- Mysql config file path 4- Command config file path 5- Controller config file path");
 
         // create singleton instance of Configuration class that will hold configuration files paths
-        Configuration.init(args[0], args[1], args[2], args[3]);
+        Configuration.init(args[0], args[1], args[2], args[3], args[4]);
 
         // create singleton instance of DatabaseConnection class that is responsible for making connections with databases
         DatabaseConnection.init();
