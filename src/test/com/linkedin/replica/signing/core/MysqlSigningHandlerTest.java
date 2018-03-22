@@ -1,10 +1,10 @@
-package com.linkedin.replica.signing.tests.core;
+package com.linkedin.replica.signing.core;
 
+import com.linkedin.replica.signing.TestsUtils;
 import com.linkedin.replica.signing.config.Configuration;
 import com.linkedin.replica.signing.database.DatabaseConnection;
 import com.linkedin.replica.signing.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signing.models.User;
-import com.linkedin.replica.signing.tests.TestsUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

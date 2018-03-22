@@ -1,4 +1,4 @@
-package com.linkedin.replica.signing.tests;
+package com.linkedin.replica.signing;
 
 import com.arangodb.ArangoCollection;
 import com.arangodb.entity.CollectionEntity;

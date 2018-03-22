@@ -1,20 +1,18 @@
-package com.linkedin.replica.signing.tests.messaging;
+package com.linkedin.replica.signing.messaging;
 
 import com.arangodb.ArangoDatabase;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.linkedin.replica.signing.TestsUtils;
 import com.linkedin.replica.signing.config.Configuration;
 import com.linkedin.replica.signing.database.DatabaseConnection;
-import com.linkedin.replica.signing.messaging.ClientMessagesReceiver;
 import com.linkedin.replica.signing.models.User;
-import com.linkedin.replica.signing.tests.TestsUtils;
 import com.linkedin.replica.signing.utils.JwtUtils;
 import com.linkedin.replica.signing.utils.SHA512;
 import com.rabbitmq.client.*;
 import org.junit.*;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;

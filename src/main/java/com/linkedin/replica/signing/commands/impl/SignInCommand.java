@@ -4,14 +4,12 @@ import com.linkedin.replica.signing.commands.Command;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 import com.linkedin.replica.signing.exceptions.SigningException;
 import com.linkedin.replica.signing.models.User;
-import com.linkedin.replica.signing.tests.TestsUtils;
 import com.linkedin.replica.signing.utils.JwtUtils;
 import com.linkedin.replica.signing.utils.SHA512;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SignInCommand extends Command {
