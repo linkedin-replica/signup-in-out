@@ -23,7 +23,7 @@ public class MysqlSigningHandler implements SigningHandler {
         ResultSet results = statement.getResultSet();
         if (results.next()) {
             user = new User();
-            user.setId("" + results.getInt("id"));
+            user.setId(results.getString("id"));
             user.setEmail(results.getString("email"));
             user.setPassword(results.getString("password"));
         }
@@ -31,9 +31,10 @@ public class MysqlSigningHandler implements SigningHandler {
     }
 
     public String createUser(User user) throws SQLException {
-        CallableStatement statement = dbInstance.prepareCall("{CALL Insert_User(?, ?)}");
+        CallableStatement statement = dbInstance.prepareCall("{CALL insert_user(?, ?, ?)}");
         statement.setString(1, user.getEmail());
         statement.setString(2, user.getPassword());
+        statement.setString(3, user.getId());
         statement.executeQuery();
         return getUser(user.getEmail()).getId();
     }

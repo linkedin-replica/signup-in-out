@@ -9,6 +9,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class SignUpCommand extends Command {
 
@@ -43,6 +44,7 @@ public class SignUpCommand extends Command {
         else {
             User user = new User();
             user.setEmail(email);
+            user.setId(UUID.randomUUID().toString());
             user.setPassword(password);
             user.setFirstName((String) args.get("firstName"));
             user.setLastName((String) args.get("lastName"));

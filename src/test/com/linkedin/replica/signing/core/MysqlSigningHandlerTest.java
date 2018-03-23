@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,6 +54,7 @@ public class MysqlSigningHandlerTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
+        user.setId(UUID.randomUUID().toString());
 
         String userId = mysqlDatabaseHandler.createUser(user);
 
@@ -70,6 +72,7 @@ public class MysqlSigningHandlerTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
+        user.setId(UUID.randomUUID().toString());
 
         TestsUtils.createUserSQL(user, dbInstance);
 
@@ -93,6 +96,7 @@ public class MysqlSigningHandlerTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
+        user.setId(UUID.randomUUID().toString());
         TestsUtils.createUserSQL(user, dbInstance);
 
         User newUser = mysqlDatabaseHandler.getUser(email);

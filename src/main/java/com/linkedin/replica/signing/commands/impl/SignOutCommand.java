@@ -23,7 +23,6 @@ public class SignOutCommand extends Command {
      */
 
     public Boolean execute() {
-        validateArgs(new String[]{"jwtToken"});
-        return JwtUtils.validateToken((String) args.get("jwtToken"));
+        return true;
     }
 }
