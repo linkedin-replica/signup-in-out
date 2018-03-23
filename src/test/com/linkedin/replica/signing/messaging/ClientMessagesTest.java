@@ -103,6 +103,7 @@ public class ClientMessagesTest {
         User user = new User();
         user.setEmail("ahmed@gmail.com");
         user.setPassword(SHA512.hash("1234"));
+        user.setId(UUID.randomUUID().toString());
         TestsUtils.createUserSQL(user, mysqlDBInstance);
         JsonObject object = new JsonObject();
         object.addProperty("commandName", "signing.signIn");
@@ -143,6 +144,7 @@ public class ClientMessagesTest {
         User user = new User();
         user.setEmail("ahmed@gmail.com");
         user.setPassword(SHA512.hash("1234"));
+        user.setId(UUID.randomUUID().toString());
         TestsUtils.createUserSQL(user, mysqlDBInstance);
         JsonObject object = new JsonObject();
         object.addProperty("commandName", "signing.signIn");
@@ -260,6 +262,7 @@ public class ClientMessagesTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(SHA512.hash(password));
+        user.setId(UUID.randomUUID().toString());
         TestsUtils.createUserSQL(user, mysqlDBInstance);
 
         JsonObject object = new JsonObject();

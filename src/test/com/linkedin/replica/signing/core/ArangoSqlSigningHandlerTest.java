@@ -13,6 +13,7 @@ import com.linkedin.replica.signing.config.Configuration;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -71,6 +72,7 @@ public class ArangoSqlSigningHandlerTest {
         userProfile.setPassword(password);
         userProfile.setFirstName(firstname);
         userProfile.setLastName(lastname);
+        userProfile.setId(UUID.randomUUID().toString());
 
 
         String userId = arangoSqlSigningHandler.createUser(userProfile);
@@ -102,6 +104,7 @@ public class ArangoSqlSigningHandlerTest {
         userProfile.setPassword(password);
         userProfile.setFirstName(firstname);
         userProfile.setLastName(lastname);
+        userProfile.setId(UUID.randomUUID().toString());
 
         TestsUtils.createUserSQL(userProfile, mysqlDbInstance);
 

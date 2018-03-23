@@ -9,6 +9,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class TestsUtils {
 
@@ -21,7 +22,7 @@ public class TestsUtils {
             ResultSet results = statement.getResultSet();
             if (results.next()) {
                 user = new User();
-                user.setId("" + results.getInt("id"));
+                user.setId(UUID.randomUUID().toString());
                 user.setEmail(results.getString("email"));
                 user.setPassword(results.getString("password"));
             }
@@ -34,9 +35,10 @@ public class TestsUtils {
 
     public static String createUserSQL(User user, Connection dbInstance) {
         try {
-            CallableStatement statement = dbInstance.prepareCall("{CALL Insert_User(?, ?)}");
+            CallableStatement statement = dbInstance.prepareCall("{CALL Insert_User(?, ?, ?)}");
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
+            statement.setString(3, user.getId());
             statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,5 +77,4 @@ public class TestsUtils {
     public static User getUserArango(String userId, ArangoCollection collection) {
         return collection.getDocument(userId, User.class);
     }
-
 }
