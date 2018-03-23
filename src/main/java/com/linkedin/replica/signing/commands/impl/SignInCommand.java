@@ -10,7 +10,6 @@ import com.linkedin.replica.signing.utils.SHA512;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SignInCommand extends Command {
@@ -28,12 +27,10 @@ public class SignInCommand extends Command {
 
     public String execute() throws SQLException, UnsupportedEncodingException {
         validateArgs(new String[]{"email", "password"});
-
         SigningHandler signingHandler = (SigningHandler) dbHandler;
         String email = (String) args.get("email");
         String password = SHA512.hash((String) args.get("password"));
         User user = signingHandler.getUser(email);
-
         if (user != null && user.getPassword().equals(password)) {
             Map<String, Object> claims = new HashMap<String, Object>();
             claims.put("email", user.getEmail());

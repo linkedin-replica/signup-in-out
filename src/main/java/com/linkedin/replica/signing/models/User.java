@@ -1,6 +1,5 @@
 package com.linkedin.replica.signing.models;
 
-
 import com.arangodb.entity.DocumentField;
 import com.arangodb.velocypack.annotations.Expose;
 

@@ -27,4 +27,3 @@ public class SigningService {
         return command.execute();
     }
 }
-
