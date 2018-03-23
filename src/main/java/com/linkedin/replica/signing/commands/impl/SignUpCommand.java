@@ -9,7 +9,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 public class SignUpCommand extends Command {
 

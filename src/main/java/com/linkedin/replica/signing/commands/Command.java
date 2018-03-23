@@ -1,7 +1,6 @@
 package com.linkedin.replica.signing.commands;
 
 import com.linkedin.replica.signing.database.handlers.DatabaseHandler;
-import com.linkedin.replica.signing.database.handlers.SigningHandler;
 import com.linkedin.replica.signing.exceptions.BadRequestException;
 
 import java.io.UnsupportedEncodingException;

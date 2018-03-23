@@ -10,4 +10,3 @@ CREATE TABLE IF NOT EXISTS users(
   email varchar(50) UNIQUE,
   password  varchar(512)
 );
-

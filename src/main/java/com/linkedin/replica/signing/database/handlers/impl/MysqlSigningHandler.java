@@ -3,8 +3,6 @@ package com.linkedin.replica.signing.database.handlers.impl;
 import com.linkedin.replica.signing.database.DatabaseConnection;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 import com.linkedin.replica.signing.models.User;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 

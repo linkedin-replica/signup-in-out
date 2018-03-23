@@ -1,6 +1,5 @@
 package com.linkedin.replica.signing.database.handlers.impl;
 
-import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoDatabase;
 import com.linkedin.replica.signing.config.Configuration;
 import com.linkedin.replica.signing.database.DatabaseConnection;
