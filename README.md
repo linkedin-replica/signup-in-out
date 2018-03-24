@@ -1,21 +1,29 @@
-# Signup-in-out
-### Create config file:
-```
-development.driver=com.mysql.jdbc.Driver
-development.username=root
-development.password=1234 
-development.url=jdbc:mysql://localhost/linkedin
-```
-### Common errors:
-> Instrumentation error
+# Signing (sign in/out/up):
 
-```
-Maven Projects --> Plugins --> activeJdbc --> activeJdbc:instrument --> Run Maven Build
-```
 
-### Keep in mind:
-- Surround each exception with try/catch.
-- Document each function (/** + Enter).
-- Use logger FATAL/WARNING/INFO. (log4j)
-- WARNING in case the exception don't affect the major entities (DB, server, cache).
-- FATAL (DB, server, cache).
+## Description:
+	A microservice handles registration and authentication.
+
+----
+### 1- Config File:
+	    a- IP / Port : for external system
+	    b- Rotation Policy (when to remove from Redis Cache) : 
+		      i. Time Based : eg. every 20 min
+		      ii. Retrieval (when data retrieved from Redis remove it assuming that it was read by user)	
+		      iii. mixed
+	    c. DataBaseConfigPath :
+		      i. IP
+		      ii. Port
+		      iii. Credentials
+		      iv. Name
+	    d. Redis Config
+	      	i. Host
+
+### 2- External System:
+	    As was specified in web com.linkedin.replica.services.
+	
+### 4- Database: 
+	    Use mysql database to store the user credentials (email & password) and Arandodb in storing user's profile.
+
+
+			
