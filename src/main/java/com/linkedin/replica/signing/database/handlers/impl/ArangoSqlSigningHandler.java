@@ -43,12 +43,11 @@ public class ArangoSqlSigningHandler implements SigningHandler {
     @Override
     public String createUser(User user) throws SQLException {
         CallableStatement statement = mySqlDbInstance.prepareCall("{CALL Insert_User(?, ?, ?)}");
-
         statement.setString(1, user.getEmail());
         statement.setString(2, user.getPassword());
         statement.setString(3, user.getId());
         statement.executeQuery();
         user.setId(getUser(user.getEmail()).getId());
-        return arangoDatabase.collection(config.getArangoConfigProp("collection.name")).insertDocument(user).getKey();
+        return arangoDatabase.collection(config.getArangoConfigProp("collection.name")).insertDocument(user).getId();
     }
 }

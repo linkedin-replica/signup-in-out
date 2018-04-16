@@ -5,7 +5,6 @@ import com.arangodb.ArangoDatabase;
 import com.linkedin.replica.signing.TestsUtils;
 import com.linkedin.replica.signing.database.handlers.impl.ArangoSqlSigningHandler;
 import com.linkedin.replica.signing.database.DatabaseConnection;
-import com.linkedin.replica.signing.database.handlers.impl.MysqlSigningHandler;
 import com.linkedin.replica.signing.models.User;
 import org.junit.*;
 import com.linkedin.replica.signing.config.Configuration;
@@ -20,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 public class ArangoSqlSigningHandlerTest {
 
     private static ArangoSqlSigningHandler arangoSqlSigningHandler;
-    private static MysqlSigningHandler mysqlDatabaseHandler;
     private static Connection mysqlDbInstance;
     private static ArangoDatabase arangoDb;
     static Configuration config;

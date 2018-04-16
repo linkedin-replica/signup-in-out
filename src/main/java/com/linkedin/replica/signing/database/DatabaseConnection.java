@@ -37,6 +37,8 @@ public class DatabaseConnection {
 
     private void initializeArangoDB() {
         arangoDriver = new ArangoDB.Builder()
+                .host(config.getArangoConfigProp("arangodb.host"),
+                        Integer.parseInt(config.getArangoConfigProp("arangodb.port")))
                 .user(config.getArangoConfigProp("arangodb.user"))
                 .password(config.getArangoConfigProp("arangodb.password"))
                 .build();
