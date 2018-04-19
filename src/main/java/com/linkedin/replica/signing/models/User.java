@@ -4,7 +4,6 @@ import com.arangodb.entity.DocumentField;
 import com.arangodb.velocypack.annotations.Expose;
 
 public class User {
-    @DocumentField(DocumentField.Type.KEY)
     private String id;
     private String email, firstName, lastName;
 

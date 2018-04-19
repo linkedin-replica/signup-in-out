@@ -25,6 +25,8 @@ public class ClientMessagesReceiver {
     private SigningService signingService = new SigningService();
     private final String QUEUE_NAME = configuration.getAppConfigProp("rabbitmq.queue.client");
     private final String RABBIT_MQ_IP = configuration.getAppConfigProp("rabbitmq.ip");
+    private final String RABBIT_MQ_USERNAME = configuration.getAppConfigProp("rabbitmq.username");
+    private final String RABBIT_MQ_PASSWORD = configuration.getAppConfigProp("rabbitmq.password");
 
     private ConnectionFactory factory;
     private Channel channel;
@@ -41,6 +43,8 @@ public class ClientMessagesReceiver {
     public ClientMessagesReceiver() throws IOException, TimeoutException {
         factory = new ConnectionFactory();
         factory.setHost(RABBIT_MQ_IP);
+        factory.setUsername(RABBIT_MQ_USERNAME);
+        factory.setPassword(RABBIT_MQ_PASSWORD);
         connection = factory.newConnection();
         channel = connection.createChannel();
         // declare the queue if it does not exist
