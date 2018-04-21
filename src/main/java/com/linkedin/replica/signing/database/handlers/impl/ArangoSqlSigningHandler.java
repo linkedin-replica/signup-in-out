@@ -48,6 +48,6 @@ public class ArangoSqlSigningHandler implements SigningHandler {
         statement.setString(3, user.getId());
         statement.executeQuery();
         user.setId(getUser(user.getEmail()).getId());
-        return arangoDatabase.collection(config.getArangoConfigProp("collection.name")).insertDocument(user).getId();
+        return arangoDatabase.collection(config.getArangoConfigProp("collection.name")).insertDocument(user).getKey();
     }
 }
