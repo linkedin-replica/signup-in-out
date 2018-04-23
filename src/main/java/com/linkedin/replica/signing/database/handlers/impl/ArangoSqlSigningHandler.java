@@ -60,7 +60,6 @@ public class ArangoSqlSigningHandler implements SigningHandler {
                 "FILTER user.userId == @id " +
                 "return {\"userId\": user.userId, \"name\": CONCAT(user.firstName, \" \", user.lastName), \"profilePictureUrl\": user.profilePictureUrl}";
         Map<String, Object> bindVars = new MapBuilder().put("id", userId).get();
-
         ArangoCursor<LoggedInUser> cursor = arangoDatabase.query(query, bindVars, null, LoggedInUser.class);
         LoggedInUser loggedInUser = cursor.next();
         return loggedInUser;

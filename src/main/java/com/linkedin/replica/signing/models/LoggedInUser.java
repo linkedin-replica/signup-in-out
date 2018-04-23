@@ -7,7 +7,6 @@ public class LoggedInUser {
     private String userId;
     private String name;
     private String profilePictureUrl;
-    private String token;
 
     public LoggedInUser() {
         super();
@@ -36,9 +35,4 @@ public class LoggedInUser {
     public void setId(String id) {
         this.userId = id;
     }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }

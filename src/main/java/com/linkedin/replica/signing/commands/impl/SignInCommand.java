@@ -26,7 +26,7 @@ public class SignInCommand extends Command {
      * @return Response with jwtToken and error message if an error occurs
      */
 
-    public LoggedInUser execute() throws SQLException, UnsupportedEncodingException {
+    public String execute() throws SQLException, UnsupportedEncodingException {
         validateArgs(new String[]{"email", "password"});
         SigningHandler signingHandler = (SigningHandler) dbHandler;
         String email = (String) args.get("email");
@@ -36,10 +36,8 @@ public class SignInCommand extends Command {
             Map<String, Object> claims = new HashMap<String, Object>();
             claims.put("email", user.getEmail());
             claims.put("scope", "self/groups/admins");
-            LoggedInUser loggedInUser = signingHandler.getLoggedInUser(user.getId());
-            loggedInUser.setToken(JwtUtils.generateToken(claims, user.getId(),
-                    60));
-            return loggedInUser;
+            return JwtUtils.generateToken(claims, user.getId(),
+                    60);
         } else
             throw new SigningException("Incorrect username/password");
     }
