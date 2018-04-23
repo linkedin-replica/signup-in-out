@@ -1,5 +1,6 @@
 package com.linkedin.replica.signing.database.handlers;
 
+import com.linkedin.replica.signing.models.LoggedInUser;
 import com.linkedin.replica.signing.models.User;
 
 import java.sql.SQLException;
@@ -24,5 +25,7 @@ public interface SigningHandler extends DatabaseHandler {
      * @return The user id in the database
      */
     String createUser(User user) throws SQLException;
+
+    LoggedInUser getLoggedInUser(String userId);
 
 }

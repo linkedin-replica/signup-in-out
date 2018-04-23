@@ -3,6 +3,7 @@ package com.linkedin.replica.signing.commands.impl;
 import com.linkedin.replica.signing.commands.Command;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 import com.linkedin.replica.signing.exceptions.SigningException;
+import com.linkedin.replica.signing.models.LoggedInUser;
 import com.linkedin.replica.signing.models.User;
 import com.linkedin.replica.signing.utils.JwtUtils;
 import com.linkedin.replica.signing.utils.SHA512;
@@ -25,7 +26,7 @@ public class SignInCommand extends Command {
      * @return Response with jwtToken and error message if an error occurs
      */
 
-    public String execute() throws SQLException, UnsupportedEncodingException {
+    public LoggedInUser execute() throws SQLException, UnsupportedEncodingException {
         validateArgs(new String[]{"email", "password"});
         SigningHandler signingHandler = (SigningHandler) dbHandler;
         String email = (String) args.get("email");
@@ -35,8 +36,10 @@ public class SignInCommand extends Command {
             Map<String, Object> claims = new HashMap<String, Object>();
             claims.put("email", user.getEmail());
             claims.put("scope", "self/groups/admins");
-            return JwtUtils.generateToken(claims, user.getId(),
-                    60);
+            LoggedInUser loggedInUser = signingHandler.getLoggedInUser(user.getId());
+            loggedInUser.setToken(JwtUtils.generateToken(claims, user.getId(),
+                    60));
+            return loggedInUser;
         } else
             throw new SigningException("Incorrect username/password");
     }
