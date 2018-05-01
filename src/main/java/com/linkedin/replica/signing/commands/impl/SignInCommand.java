@@ -3,6 +3,7 @@ package com.linkedin.replica.signing.commands.impl;
 import com.linkedin.replica.signing.commands.Command;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
 import com.linkedin.replica.signing.exceptions.SigningException;
+import com.linkedin.replica.signing.models.LoggedInUser;
 import com.linkedin.replica.signing.models.User;
 import com.linkedin.replica.signing.utils.JwtUtils;
 import com.linkedin.replica.signing.utils.SHA512;
