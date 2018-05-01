@@ -1,15 +1,19 @@
 package com.linkedin.replica.signing.database.handlers.impl;
 
+import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDatabase;
+import com.arangodb.util.MapBuilder;
 import com.linkedin.replica.signing.config.Configuration;
 import com.linkedin.replica.signing.database.DatabaseConnection;
 import com.linkedin.replica.signing.database.handlers.SigningHandler;
+import com.linkedin.replica.signing.models.LoggedInUser;
 import com.linkedin.replica.signing.models.User;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ArangoSqlSigningHandler implements SigningHandler {
     private ArangoDatabase arangoDatabase;
@@ -49,5 +53,15 @@ public class ArangoSqlSigningHandler implements SigningHandler {
         statement.executeQuery();
         user.setId(getUser(user.getEmail()).getId());
         return arangoDatabase.collection(config.getArangoConfigProp("collection.name")).insertDocument(user).getKey();
+    }
+
+    public LoggedInUser getLoggedInUser(String userId) {
+        String query = "FOR user IN users " +
+                "FILTER user.userId == @id " +
+                "return {\"userId\": user.userId, \"name\": CONCAT(user.firstName, \" \", user.lastName), \"profilePictureUrl\": user.profilePictureUrl}";
+        Map<String, Object> bindVars = new MapBuilder().put("id", userId).get();
+        ArangoCursor<LoggedInUser> cursor = arangoDatabase.query(query, bindVars, null, LoggedInUser.class);
+        LoggedInUser loggedInUser = cursor.next();
+        return loggedInUser;
     }
 }
