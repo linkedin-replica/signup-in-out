@@ -6,17 +6,18 @@ import com.arangodb.velocypack.annotations.Expose;
 public class User {
     @DocumentField(DocumentField.Type.KEY)
     private String id;
-    private String email, firstName, lastName;
+    private String userId, email, firstName, lastName;
 
     @Expose(serialize = false, deserialize = false)
     private String password;
 
     public String getId() {
-        return id;
+        return userId;
     }
 
     public void setId(String id) {
         this.id = id;
+        this.userId = id;
     }
 
     public String getEmail() {
