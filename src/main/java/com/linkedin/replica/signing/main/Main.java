@@ -50,6 +50,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, ParseException, SQLException, ClassNotFoundException, InterruptedException {
-        new Main().start(args);
+        String[] arr = {"src/main/resources/config/app.config","src/main/resources/config/arango.config","src/main/resources/config/mysql.config", "src/main/resources/config/command.config", "src/main/resources/config/controller.config"};
+        new Main().start(arr);
     }
 }
