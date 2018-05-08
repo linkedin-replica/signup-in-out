@@ -3,7 +3,7 @@ package com.linkedin.replica.signing.models;
 import com.arangodb.entity.DocumentField;
 
 public class LoggedInUser {
-    @DocumentField(DocumentField.Type.KEY)
+//    @DocumentField(DocumentField.Type.KEY)
     private String userId;
     private String name;
     private String profilePictureUrl;
